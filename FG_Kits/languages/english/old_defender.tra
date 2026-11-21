@@ -1,0 +1,39 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Druid Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Defender	 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @401XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+@40100000 = ~Install Defender kit~ //Install Kit
+@40100001 = ~defender~ //Lower Case Kit Name
+@40100002 = ~Defender~ //Mixed Case Kit Name
+@40100003 = ~DEFENDER: A member of a special sect within the druidic order, a Druid of this type is dedicated to preserving those who would protect nature. At the expense of some of <PRO_HISHER> druidic talents, a Defender has come into communion with the deities of the natural world to gain special abilities and rituals.
+	
+Advantages:
+- +2 bonus to Strength, Dexterity and Constitution
+- Seven cleric spells are added to <PRO_HISHER> repertoire, all the way up to 7th level. These are listed below:
+ 1st level: Sanctuary
+ 2nd level: Aid
+ 3rd level: Remove Paralysis
+ 4th level: Lesser Restoration
+ 5th level: Raise Dead
+ 6th level: Bolt of Glory
+ 7th level: Greater Restoration
+ 
+Disadvantages:
+- Cannot use Shapeshift.
+- May not use scimitars, daggers, spears or darts.~ //Kit Description
+@40100004 = ~DEFENDER: A member of a special sect within the druidic order, a Druid of this type is dedicated to preserving those who would protect nature. At the expense of some of <PRO_HISHER> druidic talents, a Defender has come into communion with the deities of the natural world to gain special abilities and rituals.
+
+Advantages:
+- +2 bonus to Strength, Dexterity and Constitution
+
+Disadvantages:
+- Cannot use Shapeshift.
+- May not use scimitars, daggers, spears or darts.
+
+  Sphere Access
+  - Major access to the sphere(s) of All, Animal, Elemental, Healing, Necromantic (restorative only), Plant, Sun, Weather
+  - Minor access to the sphere(s) of Protection
+  - No access to the sphere(s) of Astral, Chaos, Charm, Combat, Creation, Divination, Guardian, Law, Necromantic, Numbers, Protection, Summoning, Thought, Time, Travelers, War, Wards.~ //Kit Description: Divine Remix - Spheres

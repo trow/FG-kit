@@ -1,0 +1,2742 @@
+BACKUP ~FG_Kits\Backup~
+AUTHOR ~Everyone's FailGeek~
+
+ALWAYS
+	INCLUDE ~FG_Kits\!BaseItems\fl#add_kit_ee.tpa~
+
+	OUTER_SET "blank" = 0xffffffff //Variable - "blank": set to -1
+
+	ACTION_IF GAME_IS ~bgee bg2ee eet~ THEN BEGIN //Detection - Game: Checks
+		PRINT @112 //Detection - Game: Baldur's Gate 1/2
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~iwdee~ THEN BEGIN
+				PRINT @113 //Detection - Game: Icewind Dale
+			END
+		END	
+
+	ACTION_IF NOT VARIABLE_IS_SET "dr_state" THEN BEGIN //Detection - DR: Checks
+		ACTION_IF NOT MOD_IS_INSTALLED ~DIVINE_REMIX/SETUP-DIVINE_REMIX.TP2~ ~100~ THEN BEGIN //Detection - DR: Check if Divine Remix is not installed
+			OUTER_SET "dr_state" = 0 //Variable - "dr_state": set to DR not installed
+			PRINT @121 //Detection - DR: Divine Remix is not Installed
+		END
+			ELSE BEGIN
+				ACTION_IF NOT MOD_IS_INSTALLED ~DIVINE_REMIX/SETUP-DIVINE_REMIX.TP2~ ~1000~ THEN BEGIN //Detection - DR: Check if Divine Remix - Spheres is not installed
+					OUTER_SET "dr_state" = 1 //Variable - "dr_state": set to DR installed
+					PRINT @122 //Detection - DR: Divine Remix Installed
+				END
+					ELSE BEGIN
+						OUTER_SET "dr_state" = 2 //Variable - "dr_state": set to DR Sphere System
+						PRINT @123 //Detection - DR: DR Sphere System Installed
+					END
+			END
+	END
+
+	ACTION_IF NOT VARIABLE_IS_SET "rf_state" THEN BEGIN //Detection - Refinements: Checks
+		ACTION_IF NOT MOD_IS_INSTALLED ~REFINEMENTS/SETUP-REFINEMENTS.TP2~ ~10~ THEN BEGIN //Detection - Refinements: Check if Refinements is not installed
+			OUTER_SET "rf_state" = 0 //Variable - "rf_state": set to RF not installed
+			PRINT @131 //Detection - Refinements: Refinements is not Installed
+		END
+			ELSE BEGIN
+				OUTER_SET "rf_state" = 1 //Variable - "rf_state": set to RF installed
+				PRINT @132 //Detection - Refinements: Refinements - HLAs Installed
+			END
+	END
+
+	ACTION_IF NOT VARIABLE_IS_SET "sr_state" THEN BEGIN //Detection - Spell Revisions: Checks
+		ACTION_IF NOT MOD_IS_INSTALLED ~SPELL_REV/SETUP-SPELL_REV.TP2~ ~0~ THEN BEGIN //Detection - Spell Revisions: Check if Spell Revisions is not installed
+			OUTER_SET "sr_state" = 0 //Variable - "sr_state": set to SR not installed
+			PRINT @141 //Detection - Spell Revisions: Spell Revisions is not Installed
+		END
+			ELSE BEGIN
+				OUTER_SET "sr_state" = 1 //Variable - "sr_state": set to SR installed
+				PRINT @142 //Detection - Spell Revisions: Spell Revisions Installed
+				LOAD_TRA ~FG_Kits\languages\english\setup-sr.tra~
+			END
+	END
+
+	COPY_EXISTING ~25stweap.2da~ ~override~
+		ACTION_IF FILE_SIZE ~override\25stweap.2da~ 27 = 1 THEN BEGIN
+			COPY ~FG_Kits\!BaseItems\25stweap.2da~ ~override~
+		END
+	
+END
+
+VERSION ~v1~
+AUTO_TRA ~FG_Kits\languages\%s~
+LANGUAGE ~English~
+         ~english~
+         ~FG_Kits\languages\english\setup.tra~
+LANGUAGE ~Schinese~
+         ~schinese~
+         ~FG_Kits\languages\schinese\setup.tra~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+/*
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 [X] Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 [Kit Name] 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @Z01XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @ZXX00000 DESIGNATED ZXX //Component: [X] Kits - [Kit Name]
+
+	ADD_KIT ~FGK[KitName]~ //[Kit Name]: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGK[KitName]				1		    1		    1		    1		    1		    1		    1		    1~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGK[KitName]		  		0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 0		   0		 0		  12		 15~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 0		   0		 0		   17		 17~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 0		   0		 0		   15		 15~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGK[KitName]				0	   	0	   	0	   	0	   	1	   	0	   	0	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGK[KitName]				1	    0	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGK[XXxXx].2da~
+		//Races and Classes - KITTABLE.2da
+		~[KITTABLE]~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 00~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~K[XX]~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG27 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @ZXX00001
+		//Kit Name - Mixed case
+		SAY @ZXX00002
+		//Kit description
+		SAY @ZXX00003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGK[KitName]~
+				//Optional - Backstab progression
+				//backstab = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Starting Thief Points | Level up Thief Points
+				//thiefskl = ~40 20~
+				//Optional - Trap Limit
+				//traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~35 67 67 25 80~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				//sneakatt = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - IWD:EE Crippling Strike Entry
+				//crippstr = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+		END
+*/
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Fighter Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Forest Warden 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @Z01XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @10100000 DESIGNATED 101 //Component: Fighter Kits - Forest Warden
+
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15881  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19423 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	COPY ~FG_Kits\FForeWar\FGKFFoWa.2da~ ~override~ //Forest Warden: Copy CLAB.2da
+	
+	COPY_EXISTING ~LuFi0.2da~ ~override\LuKFW.2da~ //Forest Warden: Copy LUA.2da from base class
+		PATCH_IF ("rf_state" = 1) THEN BEGIN //Detection - Refinements: Refinements is installed
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL904 *          *          1          99         20~ ~AP_FGKFWX1 *          *          1          99         1 ~ //Forest Warden: Change Resist Magic to Oakheart
+		END
+
+	ADD_KIT ~FGKFForeWar~ //Forest Warden: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKFForeWar				1		    1		    4		    4		    1		    4		    1		    1~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKFForeWar		  		1 1 1 1 4 4 1 4 1 1 1 1 1 1 4 4 1 4 4 1 1 1 4 1 1 1 4 4 2 2 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFForeWar				9		 5		   0		 0		   5		 7~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFForeWar				1		 -2		   1		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFForeWar				17		 0		   0		 0		   13		 15~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFForeWar				15		 0		   0		 0		   11		 13~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKFForeWar				0	   	1	   	0	   	1	   	1	   	1	   	0	   	1	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKFForeWar				0	    1	    1	    1	    1	    0~
+		//CLAB file
+		~override\FGKFFoWa.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_F_H K_F_D K_F_G K_F_E K_F_HE K_F_HL K_F_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 2~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KFW~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG20 RING06 RING40 * BOOT01 AMUL21 BRAC15 BELT10 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H27 STAF08~
+		//Kit Name - Lower case
+		SAY @10100001
+		//Kit Name - Mixed case
+		SAY @10100002
+		//Kit description
+		SAY @10100003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKFForeWar~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~56 130 87 1 211~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+		END
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Forest Warden: Ability 1 - Ingrain - Part 1 - Scaling Check
+		COPY ~FG_Kits\FForeWar\L20\FGKFWS1.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Scale to 20
+	END
+		ELSE BEGIN
+			COPY ~FG_Kits\FForeWar\L30\FGKFWS1.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Scale to 30
+		END
+		COPY_EXISTING ~FGKFWS1.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain
+		SAY NAME1 @10100004 //Forest Warden: Ability 1 - Ingrain - Name
+		SAY UNIDENTIFIED_DESC @10100005 //Forest Warden: Ability 1 - Ingrain - Description
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every ability
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+			FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every effect
+				READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+				PATCH_IF ("opcode" = 139) BEGIN //Forest Warden: Ability 1 - Ingrain - Part 1 - Check effect opcodes
+					WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10100006) //Forest Warden: Ability 1 - Ingrain - Effect String
+				END
+			END
+		END	
+		COPY ~FG_Kits\FForeWar\FGKFWS11.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Signposting
+		COPY ~FG_Kits\FForeWar\FGKFWS12.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Signposting
+		COPY ~FG_Kits\FForeWar\FGKFWS13.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Signposting
+		COPY ~FG_Kits\FForeWar\FGKFWS14.spl~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Signposting
+		COPY ~FG_Kits\FForeWar\FGKFWS11.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS12.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS13.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS14.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS15.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS16.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS17.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS18.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS19.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1A.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1B.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1C.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1D.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1E.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1F.eff~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 2 - Regeneration
+		COPY ~FG_Kits\FForeWar\FGKFWS1.vvc~ ~override~ //Forest Warden: Ability 1 - Ingrain - Part 1 - Signposting Effect
+		COPY ~FG_Kits\FForeWar\FGKFWS11.bam~ ~override~ //Forest Warden: Ability 1 - Ingrain - Clear BAM
+		COPY ~FG_Kits\FForeWar\FGKFWS12.bam~ ~override~ //Forest Warden: Ability 1 - Ingrain - Stone BAM
+
+	COPY ~FG_Kits\FForeWar\FGKFWS2.spl~	~override~ //Forest Warden: Ability 2 - Spruce Strength
+		SAY NAME1 @10100007 //Forest Warden: Ability 2 - Spruce Strength - Name
+		SAY UNIDENTIFIED_DESC @10100008 //Forest Warden: Ability 2 - Spruce Strength - Description
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Forest Warden: Ability 2 - Spruce Strength - Check every ability
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+			FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Forest Warden: Ability 2 - Spruce Strength - Check every effect
+				READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+				PATCH_IF ("opcode" = 139) BEGIN //Forest Warden: Ability 2 - Spruce Strength - Check effect opcodes
+					WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10100009) //Forest Warden: Ability 2 - Spruce Strength - Part 1 - Effect String
+				END
+//				PATCH_IF ("opcode" = 206) BEGIN
+//					WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10100010) //Forest Warden: Ability 2 - Spruce Strength - Effect String
+//				END
+			END
+		END	
+		ACTION_IF NOT FILE_EXISTS ~SHOUTT.bam~ THEN BEGIN //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Check if Shout BAM exists
+			COPY ~FG_Kits\!BaseItems\SHOUTT.bam~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Copy Shout Bam
+		END
+		ADD_PROJECTILE ~FG_KITS\FForeWar\FGKFWS2.pro~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Projectile
+		COPY ~FG_Kits\FForeWar\FGKFWS21.spl~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 1 - Buffs
+		COPY ~FG_Kits\FForeWar\FGKFWS22.spl~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Slam
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Check every ability
+			WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKFWS2%~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Add Projectile
+		END	
+		ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Scaling Check
+			COPY ~FG_Kits\FForeWar\L20\FGKFWS23.spl~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Scale to 20
+		END
+			ELSE BEGIN
+				COPY ~FG_Kits\FForeWar\L30\FGKFWS23.spl~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Scale to 30
+			END
+		COPY ~FG_Kits\FForeWar\FGKFWS21.eff~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Cast Slam effect
+		COPY ~FG_Kits\FForeWar\FGKFWS22.eff~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Check if Enemy effect
+		COPY ~FG_Kits\FForeWar\FGKFWS2.wav~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Slam Sound
+		COPY ~FG_Kits\FForeWar\FGKFWS21.bam~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Clear BAM
+		COPY ~FG_Kits\FForeWar\FGKFWS22.bam~ ~override~ //Forest Warden: Ability 2 - Spruce Strength - Stone BAM
+	
+	ACTION_IF NOT ((FILE_EXISTS ~SGROWTX.bam~) AND (FILE_EXISTS ~SGROWTA.bam~)) THEN BEGIN //Forest Warden: Ability 3 - Snapthorns - Check if projectile BAMs exist
+		COPY ~FG_Kits\!BaseItems\SGROWTX.bam~ ~override~ //Forest Warden: Ability 3 - Snapthorns - Copy projectile BAMs
+		COPY ~FG_Kits\!BaseItems\SGROWTA.bam~ ~override~ //Forest Warden: Ability 3 - Snapthorns - Copy projectile BAMs
+	END
+	ADD_PROJECTILE ~FG_KITS\FForeWar\FGKFWS3.pro~ //Forest Warden: Ability 3 - Snapthorns - Add projectile
+	COPY ~FG_Kits\FForeWar\FGKFWS3.spl~ ~override~ //Forest Warden: Ability 3 - Snapthorns
+		SAY NAME1 @10100011 //Forest Warden: Ability 3 - Snapthorns - Name
+		SAY UNIDENTIFIED_DESC @10100012 //Forest Warden: Ability 3 - Snapthorns - Description
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN  //Forest Warden: Ability 3 - Snapthorns - Check every ability
+			WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKFWS3%~  //Forest Warden: Ability 3 - Snapthorns - Add Projectile
+		END	
+		COPY ~FG_Kits\FForeWar\FGKFWS31.bam~ ~override~ //Forest Warden: Ability 3 - Snapthorns - Clear BAM
+		COPY ~FG_Kits\FForeWar\FGKFWS32.bam~ ~override~ //Forest Warden: Ability 3 - Snapthorns - Stone BAM
+
+	COPY ~FG_Kits\FForeWar\FGKFWX1.spl~ ~override~ //Forest Warden: High Level Ability - Oakheart
+		SAY NAME1 @10100014 //Forest Warden: High Level Ability - Oakheart - Name
+		SAY UNIDENTIFIED_DESC @10100015 //Forest Warden: High Level Ability - Oakheart - Description
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every ability
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+			FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every effect
+				READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+				PATCH_IF ("opcode" = 139) BEGIN //Forest Warden: Ability 1 - Ingrain - Part 1 - Check effect opcodes
+					WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10100016) //Forest Warden: High Level Ability - Oakheart - Effect String
+				END
+			END
+		END	
+	COPY ~FG_Kits\FForeWar\FGKFWX11.bam~ ~override~ //Forest Warden: High Level Ability - Oakheart - Clear BAM
+	COPY ~FG_Kits\FForeWar\FGKFWX12.bam~ ~override~ //Forest Warden: High Level Ability - Oakheart - Stone BAM
+		
+	COPY ~FG_Kits\FForeWar\FGKFWP1.spl~ ~override~ //Forest Warden: Passive 1 - Fire Weakness
+
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Forest Warden: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Forest Warden: Passive 2 - Restrict Armor
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_SHORT 0x1c "item_type" //Variable - "item_type": Set to item type
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x2d "item_exclusion_kit3" //Variable - "item_proficiency": Set to item kit usability
+		PATCH_IF (
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_type" = 2)
+				)
+			AND
+				(
+				("item_exclusion" BAND 0b00000000000000000000100000000000) = 0b00000000000000000000000000000000)
+			AND
+				(
+				("item_exclusion_kit3" BAND 0b10000000) = 0b10000000)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Forest Warden: Passive 2 - Restrict Armor - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (ARMOR type), (usable by single-class fighters), (usable by Archer kit), and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Forest Warden: Passive 2 - Restrict Armor - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Forest Warden: Passive 2 - Restrict Armor - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@10100002) //Forest Warden: Passive 2 - Restrict Armor - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+			 
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Fighter Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Halfling Marshal				 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @103XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @10300000 DESIGNATED 103 //Component: Fighter Kits - Halfling Marshal
+
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15881  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19423 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	COPY ~FG_Kits\FHalfMar\FGKFHaMa.2da~ ~override~ //Halfling Marshal: Copy CLAB.2da
+	
+	COPY_EXISTING ~LuFi0.2da~ ~override\LuKHM.2da~ //Halfling Marshal: Copy LUA.2da from base class
+		PATCH_IF ("rf_state" = 1) THEN BEGIN //Detection - Refinements: Refinements is installed
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL908 *          *          1          99         20~ ~GA_FGKHMX1 *          *          1          99         5 ~ //Halfling Marshal: Change War Cry to Arvoreen's Blessing
+		END
+	
+	ADD_KIT ~FGKFHalfMar~ //Halfling Marshal: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKFHalfMar				5		    0		    5		    5		    5		    5		    5		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKFHalfMar		  		0 5 5 0 5 5 5 5 5 5 5 5 0 5 5 5 5 5 0 0 5 5 0 5 5 5 5 5 0 2 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFHalfMar				9		 0		   0		 0		   0		 7~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFHalfMar				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFHalfMar				17		 0		   0		 0		   0		 15~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKFHalfMar				15		 0		   0		 0		   0		 13~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKFHalfMar				1	   	0	   	0	   	1	   	1	   	0	   	1	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKFHalfMar				0	    1	    1	    1	    1	    0~
+		//CLAB file
+		~override\FGKFHaMa.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_F_HL~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 02~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KHM~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~CHAN09 * HELM07 BAG20 RING06 RING40 * BOOT01 AMUL21 BRAC15 BELT10 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H27 STAF08~
+		//Kit Name - Lower case
+		SAY @10300001
+		//Kit Name - Mixed case
+		SAY @10300002
+		//Kit description
+		SAY @10300003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKFHalfMar~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~28 105 122 25 80~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				clsrcreq = ~0 0 0 0 1 0 0~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+		END
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+	COPY ~FG_Kits\FHalfMar\FGKHMS1.spl~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush
+		SAY NAME1 @10300004 //Halfling Marshal: Ability 1 - Adrenaline Rush - Name
+		SAY UNIDENTIFIED_DESC @10300005 //Halfling Marshal: Ability 1 - Adrenaline Rush - Description
+		ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Scaling Check
+			COPY ~FG_Kits\FHalfMar\L20\FGKHMS11.spl~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Scale to 20
+		END
+			ELSE BEGIN
+				COPY ~FG_Kits\FHalfMar\L30\FGKHMS11.spl~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Scale to 30
+			END
+			COPY_EXISTING ~FGKHMS11.spl~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Healing
+				READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+				READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+				READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+				FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Check every ability
+					READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+					READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+					FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Check every effect
+						READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+						PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Check effect opcodes
+							WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300006) //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Effect String
+						END
+					END
+				END	
+		COPY ~FG_Kits\FHalfMar\FGKHMS12.spl~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Hasting
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 2 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 1 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300007) //Halfling Marshal: Ability 1 - Adrenaline Rush - Part 2 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\FHalfMar\FGKHMS11.bam~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Clear BAM
+		COPY ~FG_Kits\FHalfMar\FGKHMS12.bam~ ~override~ //Halfling Marshal: Ability 1 - Adrenaline Rush - Stone BAM
+	
+	COPY ~FG_Kits\FHalfMar\FGKHMS2.spl~ ~override~ //Halfling Marshal: Ability 2 - Focus Formation
+		SAY NAME1 @10300008 //Halfling Marshal: Ability 2 - Focus Formation - Name
+		SAY UNIDENTIFIED_DESC @10300009 //Halfling Marshal: Ability 2 - Focus Formation - Description
+		ADD_PROJECTILE ~FG_Kits\FHalfMar\FGKHMS2.pro~ //Halfling Marshal: Ability 2 - Focus Formation - Projectile
+		COPY ~FG_Kits\FHalfMar\FGKHMS21.spl~ ~override~ //Halfling Marshal: Ability 2 - Focus Formation - Part 1 - Find Targets
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 1 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 1 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 1 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300010) //Halfling Marshal: Ability 2 - Focus Formation - Part 1 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\FHalfMar\FGKHMS22.spl~ ~override~ //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - Give Bonuses
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - check every ability
+				WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKHMS2%~ //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - Add Projectile
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300010) //Halfling Marshal: Ability 2 - Focus Formation - Part 2 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\FHalfMar\FGKHMS21.bam~ ~override~ //Halfling Marshal: Ability 2 - Focus Formation - Clear BAM
+		COPY ~FG_Kits\FHalfMar\FGKHMS22.bam~ ~override~ //Halfling Marshal: Ability 2 - Focus Formation - Stone BAM
+	
+	COPY ~FG_Kits\FHalfMar\FGKHMP1.spl~ ~override~ //Halfling Marshal: Passive 1 - Saving Throw bonuss
+	
+	COPY ~FG_Kits\FHalfMar\FGKHMX1.spl~ ~override~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing
+		SAY NAME1 @10300011 //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Name
+		SAY UNIDENTIFIED_DESC @10300012 //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Description
+		ADD_PROJECTILE ~FG_Kits\FHalfMar\FGKHMX1.pro~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Projectile
+		COPY ~FG_Kits\FHalfMar\FGKHMX11.spl~ ~override~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 1 - Self
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 1 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 1 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 1 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300013) //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 1 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\FHalfMar\FGKHMX12.spl~ ~override~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Party
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Check every ability
+				WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKHMX1%~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Add Projectile
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@10300014) //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Part 2 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\FHalfMar\FGKHMX11.bam~ ~override~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Clear BAM
+		COPY ~FG_Kits\FHalfMar\FGKHMX12.bam~ ~override~ //Halfling Marshal: High Level Ability - Arvoreen's Blessing - Stone BAM
+
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Cataphract: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Halfling Marshal: Passive 1 - Restrict Weapons
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x31 "item_proficiency" //Variable - "item_proficiency": Set to item proficiency
+		PATCH_IF (
+				(
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000010) = 0b00000000000000000000000000000010)
+				)
+			AND
+				(
+				("item_exclusion" BAND 0b00000000000000000000100000000000) = 0b00000000000000000000000000000000)
+				)
+			AND NOT
+				(
+				("item_proficiency" = "105")
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Halfling Marshal: Passive 1 - Restrict Weapons - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (TWO-HANDED), (SHORBOW proficiency), (usable by single-class Fighters) and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Halfling Marshal: Passive 1 - Restrict Weapons - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Halfling Marshal: Passive 1 - Restrict Weapons - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@10300002) //Halfling Marshal: Passive 1 - Restrict Weapons - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+
+	
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Ranger Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Cataphract 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @201XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @20100000 DESIGNATED 201 //Component: Ranger Kits - Cataphract
+
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15888  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19429 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	COPY_EXISTING ~CLABRN01.2da~ ~override\FGKRCpht.2da~ //Cataphract: Copy CLAB.2da from base druid
+		COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+			COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+				SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+				SET "clabrow2" = ("clabrow" + 2) //Variable - "clabrow1": Set to existing rows +2
+				SET "clabrow3" = ("clabrow" + 3) //Variable - "clabrow1": Set to existing rows +3
+				SET "clabrow4" = ("clabrow" + 4) //Variable - "clabrow1": Set to existing rows +4
+				SET "clabrow5" = ("clabrow" + 5) //Variable - "clabrow1": Set to existing rows +5
+					PATCH_IF ("clabcol" < 50) THEN BEGIN //Cataphract: Check if CLAB.2da extended to 50
+						INSERT_2DA_ROW "clabrow1" 40 ~ABILITY%clabrow1%    ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1~ //Cataphract: Add Ability 1 - Tidefall - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow2" 40 ~ABILITY%clabrow2%    AP_FGKCtP1  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 1 - AC Bonus - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow3" 40 ~ABILITY%clabrow3%    AP_FGKCtP2  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 2 - Missile Damage Weakness - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow4" 40 ~ABILITY%clabrow4%    AP_FGKCtP3  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 3 - Missile To Hit Penalty- CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow5" 40 ~ABILITY%clabrow5%    AP_FGKCtP4  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 4 - Missile Damage Penalty - CLAB.2da Max Level 40
+					END
+						ELSE BEGIN
+							INSERT_2DA_ROW "clabrow1" 50 ~ABILITY%clabrow1%    ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****        ****        GA_FGKCtS1  ****        ****~ //Cataphract: Add Ability 1 - Tidefall - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow2" 50 ~ABILITY%clabrow2%    AP_FGKCtP1  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 1 - AC Bonus - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow2" 50 ~ABILITY%clabrow3%    AP_FGKCtP2  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 2 - Missile Damage Weakness - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow2" 50 ~ABILITY%clabrow4%    AP_FGKCtP3  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 3 - Missile To Hit Penalty - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow2" 50 ~ABILITY%clabrow5%    AP_FGKCtP4  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Cataphract: Add Passive 4 - Missile Damage Penalty - CLAB.2da Max Level 50
+						END
+
+	COPY_EXISTING ~LuRa0.2da~ ~override\LuKCt.2da~ //Cataphract: Copy LUA.2da from base class
+		PATCH_IF ("rf_state" = 1) THEN BEGIN//Detection - Refinements: Refinements is not installed
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL909 *          *          1          99         1           GA_SPCL905   *           *~ ~AP_FGKCtX1 *          *          1          99         1           *            *           *~ //Cataphract: Change Smite to One Stands Alone
+		END
+
+	ADD_KIT ~FGKRCataphr~ //Cataphract: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKRCataphr				2		    2		    2		    0		    0		    2		    2		    2~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKRCataphr		  		2 2 0 2 2 2 2 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 0 2 2 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRCataphr				13		  13		14		  0		    14		  0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRCataphr				0		  0		    0		  0		    0		  0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRCataphr				17		  17		0		  0		    17		  0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRCataphr				15		  15		0		  0		    15		  0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKRCataphr				1	   	0	   	0	   	1	   	0	   	0	   	1	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKRCataphr				0	    1	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKRCpht.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_R_H K_R_D K_R_G K_R_E K_R_HE K_R_HL K_R_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 12~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KCt~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * HELM07 BAG24 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @20100001
+		//Kit Name - Mixed case
+		SAY @20100002
+		//Kit description
+		SAY @20100003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKRCataphr~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~28 55 163 91 93~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~0 0 0 100 100 0 0 0~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				//sneakatt = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - IWD:EE Crippling Strike Entry
+				//crippstr = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+		END
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+	ACTION_IF NOT ((FILE_EXISTS ~SWAVEH.bam~) AND (FILE_EXISTS ~SWAVEH.vvc~) AND (FILE_EXISTS ~SWAVEX.bam~) AND (FILE_EXISTS ~TRA_56.wav~) AND (FILE_EXISTS ~#FF_P110.wav~)) THEN BEGIN //Cataphract: Ability 1 - Tidefall - Check if 
+		COPY ~FG_Kits\!BaseItems\SWAVEH.bam~ ~override~ //Cataphract: Ability 1 - Tidefall - Copy projectile BAMs and WAVs
+		COPY ~FG_Kits\!BaseItems\SWAVEH.vvc~ ~override~ //Cataphract: Ability 1 - Tidefall - Copy projectile BAMs and WAVs
+		COPY ~FG_Kits\!BaseItems\SWAVEX.bam~ ~override~ //Cataphract: Ability 1 - Tidefall - Copy projectile BAMs and WAVs
+		COPY ~FG_Kits\!BaseItems\TRA_56.wav~ ~override~ //Cataphract: Ability 1 - Tidefall - Copy projectile BAMs and WAVs
+		COPY ~FG_Kits\!BaseItems\#FF_P110.wav~ ~override~ //Cataphract: Ability 1 - Tidefall - Copy projectile BAMs and WAVs	
+	END
+	COPY ~FG_Kits\RCataphr\FGKCtS1.spl~ ~override~ //Cataphract: Ability 1 - Tidefall
+		SAY NAME1 @20100004
+		SAY UNIDENTIFIED_DESC @20100005
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: High Level Ability - Damage Buff - Part 2 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Cataphract: High Level Ability - Damage Buff - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Cataphract: High Level Ability - Damage Buff - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@20100006) //Cataphract: Ability 1 - Tidefall - Part 1 - Effect String
+					END
+				END
+			END
+		COPY ~FG_Kits\RCataphr\FGKCtS11.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 1 - Signposting
+		COPY ~FG_Kits\RCataphr\FGKCtS12.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 1 - Signposting
+		COPY ~FG_Kits\RCataphr\FGKCtS11.eff~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 2 - Melee Hit Effect
+		COPY ~FG_Kits\RCataphr\FGKCtS13.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 2 - Melee Hit Spell 
+		ADD_PROJECTILE ~FG_Kits\RCataphr\FGKCtS11.pro~ //Cataphract: Ability 1 - Tidefall - Part 3 - Wave Projectile
+		ADD_PROJECTILE ~FG_Kits\RCataphr\FGKCtS12.pro~ //Cataphract: Ability 1 - Tidefall - Part 3 - Wave Projectile
+		COPY ~FG_Kits\RCataphr\FGKCtS13.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 4 - Wave
+		ADD_PROJECTILE ~FG_Kits\RCataphr\FGKCtS12.eff~ //Cataphract: Ability 1 - Tidefall - Part 4 - Wave Enemy Selection
+		COPY ~FG_Kits\RCataphr\FGKCtS14.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 4 - Wave AoE
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: Passive 3 - Armor Class Debuff - Part 1 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x10) "min_level" //Variable - "min_level": Set to minimum level
+				PATCH_IF ("min_level" = 1) THEN BEGIN
+					WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKCtS11%~ //Cataphract: Passive 3 - Armor Class Debuff - Part 1 - Add Projectile
+				END
+					ELSE BEGIN
+						WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKCtS12%~ //Cataphract: Passive 3 - Armor Class Debuff - Part 1 - Add Projectile
+					END
+			END	
+		COPY ~FG_Kits\RCataphr\FGKCtS12.eff~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 4 - Check if Enemy effect
+		ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Forest Warden: Ability 2 - Spruce Strength - Part 2 - Scaling Check
+			COPY ~FG_Kits\RCataphr\L20\FGKCtS15.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 4 - Crushing Damage - Scale to 20
+		END
+			ELSE BEGIN
+				COPY ~FG_Kits\RCataphr\L30\FGKCtS15.spl~ ~override~ //Cataphract: Ability 1 - Tidefall - Part 4 - Crushing Damage - Scale to 30
+			END
+		COPY ~FG_Kits\RCataphr\FGKCtS11.bam~ ~override~ //Cataphract: Ability 1 - Tidefall - Clear BAM
+		COPY ~FG_Kits\RCataphr\FGKCtS12.bam~ ~override~ //Cataphract: Ability 1 - Tidefall - Stone BAM
+
+	COPY ~FG_Kits\RCataphr\FGKCtX1.spl~ ~override~ //Cataphract: High Level Ability - One Stands Alone - Part 1 - Protection from Spell
+		SAY NAME1 @20100008
+		SAY UNIDENTIFIED_DESC @20100009
+		COPY ~FG_Kits\RCataphr\FGKCtX11.bam~ ~override~ //Cataphract: High Level Ability - One Stands Alone - Clear BAM
+		COPY ~FG_Kits\RCataphr\FGKCtX12.bam~ ~override~ //Cataphract: High Level Ability - One Stands Alone - Stone BAM
+
+	ADD_PROJECTILE ~FG_Kits\RCataphr\FGKCtP1.pro~ //Cataphract: Passive 1 - Armor Class Buff - Projectile
+	COPY ~FG_Kits\RCataphr\FGKCtP1.spl~ ~override~ //Cataphract: Passive 3 - Armor Class Debuff
+		COPY ~FG_Kits\RCataphr\FGKCtP11.spl~ ~override~ //Cataphract: Passive 1 - Armor Class Buff - Part 1 - Aura
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: Passive 3 - Armor Class Debuff - Part 1 - Check every ability
+				WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKCtP1%~ //Cataphract: Passive 3 - Armor Class Debuff - Part 1 - Add Projectile
+			END	
+		COPY ~FG_Kits\RCataphr\FGKCtP1.eff~ ~override~ //Cataphract: Passive 1 - Armor Class Buff - Part 2 - Enemy Selection
+		COPY ~FG_Kits\RCataphr\FGKCtP12.spl~ ~override~ //Cataphract: Passive 1 - Armor Class Buff - Part 3 - Actual Buff
+		COPY ~FG_Kits\RCataphr\FGKCtP13.spl~ ~override~ //Cataphract: Passive 1 - Armor Class Buff - Part 4 - Protection from HLA
+		COPY ~FG_Kits\RCataphr\FGKCtP14.spl~ ~override~ //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Actual Buff
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@20100010) //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Effect String
+					END
+				END
+			END	
+		COPY ~FG_Kits\RCataphr\FGKCtP15.spl~ ~override~ //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Display String
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 267) BEGIN //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@20100010) //Cataphract: High Level Ability - Extra Armor Class and Save Buff - Part 2 - Effect String
+					END
+				END
+			END	
+	
+	COPY ~FG_Kits\RCataphr\FGKCtP2.spl~ ~override~ //Cataphact: Passive 2 - Missile Damage Weakness
+	COPY ~FG_Kits\RCataphr\FGKCtP3.spl~ ~override~ //Cataphact: Passive 3 - Missile Weapon To Hit Penalty
+	COPY ~FG_Kits\RCataphr\FGKCtP4.spl~ ~override~ //Cataphact: Passive 4 - Missile Weapon Damage Penalty
+	COPY ~FG_Kits\RCataphr\FGKCtP4.spl~ ~override~ //Cataphact: Passive 5 - Stealth Penalty
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Cataphract: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+
+	OUTER_SET "item_melee" = 0
+	OUTER_SET "item_ability_location" = 0
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Cataphract: Passive 6 - Restrict Weapons
+		SET "item_melee" = 0
+		SET "item_ability_location" = 0
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Cataphract: Passive 6 - Restrict Weapons - Check every ability
+			READ_BYTE ("abilities_off" + 0x28 * "ability") "item_ability_type" //Variable - "item_ability_type": Set to item ability type
+			READ_BYTE ("abilities_off" + 0x28 * "ability" + 0x02) "item_ability_location" //Variable - "item_ability_location": Set to item ability location
+			PATCH_IF (("item_ability_type" = 1) AND ("item_ability_location" = 1)) THEN BEGIN //Cataphract: Passive 6 - Restrict Weapons - Check if item has a MELEE ability AND is in WEAPON location
+				SET "item_melee" = 1
+			END
+		END	
+		PATCH_IF (
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_exclusion" BAND 0b00000000001000000000000000000000) = 0b00000000000000000000000000000000)
+			AND 
+				(
+				("item_ability_location" = 1))
+			AND NOT
+				(
+				 ("item_melee" = 1))
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Cataphract: Passive 6 - Restrict Weapons - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (usable by single-class rangers), (melee ability) and without (ranged ability), (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Cataphract: Passive 6 - Restrict Weapons - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Cataphract: Passive 6 - Restrict Weapons - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@20100002) //Cataphract: Passive 6 - Restrict Weapons - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES	
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Ranger Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Artillier 					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @202XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @20200000 DESIGNATED 202 //Component: Ranger Kits - Artillier
+
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15888  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19429 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	COPY_EXISTING ~CLABRN01.2da~ ~override\FGKRAtlr.2da~ //Artillier: Copy CLAB.2da from base druid
+		COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+			COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+				SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+				SET "clabrow2" = ("clabrow" + 2) //Variable - "clabrow1": Set to existing rows +2
+				SET "clabrow3" = ("clabrow" + 3) //Variable - "clabrow1": Set to existing rows +3
+				SET "clabrow4" = ("clabrow" + 4) //Variable - "clabrow1": Set to existing rows +4
+				SET "clabrow5" = ("clabrow" + 5) //Variable - "clabrow1": Set to existing rows +5
+				SET "clabrow6" = ("clabrow" + 6) //Variable - "clabrow1": Set to existing rows +5
+					PATCH_IF ("clabcol" < 50) THEN BEGIN //Artillier: Check if CLAB.2da extended to 50
+						INSERT_2DA_ROW "clabrow1" 40 ~ABILITY%clabrow1%    GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****~ //Artillier: Add Ability 1 - Set Snare - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow2" 40 ~ABILITY%clabrow2%    GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****~ //Artillier: Add Ability 2 - Cloudpiercer - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow3" 40 ~ABILITY%clabrow3%    ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2~ //Artillier: Add Ability 3 - Farsight - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow4" 40 ~ABILITY%clabrow4%    AP_FGKArP1  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 1 - Set Traps +15% - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow5" 40 ~ABILITY%clabrow5%    ****        AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 2 - Set Traps +7% - CLAB.2da Max Level 40
+						INSERT_2DA_ROW "clabrow6" 40 ~ABILITY%clabrow6%    AP_FGKArP3  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 3 - Armor Class Debuff - CLAB.2da Max Level 40
+					END
+						ELSE BEGIN
+							INSERT_2DA_ROW "clabrow1" 50 ~ABILITY%clabrow1%    GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****        GA_SPCL412  ****        ****        ****        ****~ //Artillier: Add Ability 1 - Set Snare - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow2" 50 ~ABILITY%clabrow2%    GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****        ****        ****        GA_FGKArS1  ****~ //Artillier: Add Ability 2 - Cloudpiercer - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow3" 50 ~ABILITY%clabrow3%    ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****        ****        ****        ****        ****        ****        GA_FGKArS2  ****        ****~ //Artillier: Add Ability 3 - Farsight - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow4" 50 ~ABILITY%clabrow4%    AP_FGKArP1  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 1 - Set Traps +15% - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow5" 50 ~ABILITY%clabrow5%    ****        AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  AP_FGKArP2  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 2 - Set Traps +7% - CLAB.2da Max Level 50
+							INSERT_2DA_ROW "clabrow6" 50 ~ABILITY%clabrow6%    AP_FGKArP3  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Artillier: Add Passive 3 - Armor Class Debuff - CLAB.2da Max Level 50
+						END
+
+	ACTION_IF ("rf_state" = 0) THEN BEGIN//Detection - Refinements: Refinements is not installed
+		COPY_EXISTING ~LuRa0.2da~ ~override\LuKAr.2da~ //Artillier: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuRa2.2da~ ~override\LuKAr.2da~ //Artillier: Copy LUA.2da from Archer
+				REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#PREC *          *          1          99         5           *            *           *                  ~ ~AP_FGKArX1 *          *          1          99         1           *            *           *                  ~ //Artillier: Change Precision to Swift Aim
+		END
+	
+	ADD_KIT ~FGKRArtilli~ //Artillier: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKRArtilli				0		    0		    0		    4		    4		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKRArtilli		  		0 0 4 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 4 4 4 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRArtilli				13		  13		14		  0		    14		  0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRArtilli				0		  0		    0		  0		    0		  0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRArtilli				17		  17		0		  0		    17		  0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKRArtilli				15		  15		0		  0		    15		  0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKRArtilli				1	   	0	   	0	   	1	   	0	   	0	   	1	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKRArtilli				0	    1	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKRAtlr.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_R_H K_R_D K_R_G K_R_E K_R_HE K_R_HL K_R_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 12~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KAr~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * HELM07 BAG24 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 STAF08 SW1H39 BOW18~
+		//Kit Name - Lower case
+		SAY @20200001
+		//Kit Name - Mixed case
+		SAY @20200002
+		//Kit description
+		SAY @20200003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKRArtilli~
+				//Optional - Backstab progression
+				//backstab = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Starting Thief Points | Level up Thief Points
+				//thiefskl = ~40 20~
+				//Optional - Trap Limit
+				//traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~28 116 164 91 93~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~0 0 0 100 100 0 100 0~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				//sneakatt = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - IWD:EE Crippling Strike Entry
+				//crippstr = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+		END
+		COPY_EXISTING ~traplimt.2da~ ~override~
+			COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+				COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+					SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+						INSERT_2DA_ROW "clabrow1" 1 ~FGKRArtilli 6~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+	COPY ~FG_Kits\RArtilli\FGKArS1.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer
+		SAY NAME1 @20200004
+		SAY UNIDENTIFIED_DESC @20200005
+		COPY ~FG_Kits\RArtilli\FGKArS11.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 1 - Pause for 6
+		COPY ~FG_Kits\RArtilli\FGKArS12.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 2 - Pause for 2
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artiliier: High Level Ability - Swift Aim - Part 2 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Artiliier: High Level Ability - Swift Aim - Part 2 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Artiliier: High Level Ability - Swift Aim - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@20200010) //Artiliier: High Level Ability - Swift Aim - Part 2 - Effect String
+					END
+				END
+			END	
+		ADD_PROJECTILE ~FG_Kits\RArtilli\FGKARS11.pro~ //Artillier: Ability 1 - Cloudpiercer - Part 3 - Projectile
+		COPY ~FG_Kits\RArtilli\FGKArS13.bam~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 3 - Projectile BAM
+		ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Artillier: Ability 1 - Cloudpiercer - Part 3 - Scaling Check
+			COPY ~FG_Kits\RArtilli\L20\FGKArS13.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 3 - Scale to 20
+		END
+			ELSE BEGIN
+				COPY ~FG_Kits\RArtilli\L30\FGKArS13.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 3 - Scale to 30
+			END
+			COPY_EXISTING ~FGKArS13.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 3 - Target damage
+				READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+				READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+				READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+				FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artiliier: Ability 3 - Cloudpiercer - Part 3 - Check every ability
+					WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKARS11%~ //Artiliier: Ability 3 - Cloudpiercer - Part 3 - Add Projectile
+				END	
+		COPY ~FG_Kits\RArtilli\FGKArS14.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 4 - Target cripple
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artiliier: Ability 2 - Cloudpiercer - Part 4 - Check every ability
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+				READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+				FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Artiliier: Ability 2 - Cloudpiercer - Part 4 - Check every effect
+					READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+					PATCH_IF ("opcode" = 139) BEGIN //Artiliier: Ability 2 - Cloudpiercer - Part 2 - Check effect opcodes
+						WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@20200007) //Artiliier: Ability 2 - Cloudpiercer - Part 4 - Effect String
+					END
+				END
+			END	
+		ADD_PROJECTILE ~FG_Kits\RArtilli\FGKARS12.pro~
+		ACTION_IF NOT (GAME_IS ~iwdee~) THEN BEGIN //Artillier: Ability 1 - Cloudpiercer - Part 5 - Scaling Check
+			COPY ~FG_Kits\RArtilli\L20\FGKArS15.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 5 - Scale to 20
+		END
+			ELSE BEGIN
+				COPY ~FG_Kits\RArtilli\L30\FGKArS15.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 5 - Scale to 30
+			END
+			COPY_EXISTING ~FGKArS15.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 5 - AoE damage
+				READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+				READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+				READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+				FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artiliier: Ability 2 - Cloudpiercer - Part 5 - Check every ability
+					WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKARS12%~ //Artiliier: Ability 2 - Cloudpiercer - Part 5 - Add Projectile
+				END	
+		COPY ~FG_Kits\RArtilli\FGKArS16.spl~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Part 6 - Target slay
+		COPY ~FG_Kits\RArtilli\FGKArS11.bam~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Clear BAM
+		COPY ~FG_Kits\RArtilli\FGKArS12.bam~ ~override~ //Artillier: Ability 1 - Cloudpiercer - Stone BAM
+
+	COPY_EXISTING ~SPPR415.spl~ ~override\FGKArS2.spl~ //Artillier: Ability 2 - Farsight
+		//The following code essentially copied from Divine Remix, adapted
+		WRITE_SHORT 0x1c 4 //Spell Type: to Innate
+		WRITE_LONG 0x34 1 //Spell Level: to 1
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		FOR ("ability" = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN
+			WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x02) 4 //Spell Location: to Innate Slots
+		END
+		
+	COPY ~FG_Kits\RArtilli\FGKArP1.spl~ ~override~ //Artillier: Passive 1 - Set Traps +15%
+	COPY ~FG_Kits\RArtilli\FGKArP2.spl~ ~override~ //Artillier: Passive 2 - Set Traps +7%
+	ADD_PROJECTILE ~FG_Kits\RArtilli\FGKArP3.pro~ //Artillier: Passive 3 - Armor Class Debuff - Projectile
+	COPY ~FG_Kits\RArtilli\FGKArP3.spl~ ~override~ //Artillier: Passive 3 - Armor Class Debuff
+		COPY ~FG_Kits\RArtilli\FGKArP31.spl~ ~override~ //Artillier: Passive 3 - Armor Class Debuff - Part 1 - Aura
+			READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+			READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+			READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+			FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artiliier: Passive 3 - Armor Class Debuff - Part 1 - Check every ability
+				WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x26) ~%FGKArP3%~ //Artiliier: Passive 3 - Armor Class Debuff - Part 1 - Add Projectile
+			END	
+		COPY ~FG_Kits\RArtilli\FGKArP3.eff~ ~override~ //Artillier: Passive 3 - Armor Class Debuff - Part 2 - Enemy Selection
+		COPY ~FG_Kits\RArtilli\FGKArP32.spl~ ~override~ //Artillier: Passive 3 - Armor Class Debuff - Part 3 - Actual Debuff
+		
+	COPY ~FG_Kits\RArtilli\FGKArX1.spl~ ~override~ //Artillier: High Level Ability - Swift Aim - Part 1 - Protection from Spell
+		SAY NAME1 @20200008
+		SAY UNIDENTIFIED_DESC @20200009
+		COPY ~FG_Kits\RArtilli\FGKArX11.bam~ ~override~ //Artillier: High Level Ability - Swift Aim - Clear BAM
+		COPY ~FG_Kits\RArtilli\FGKArX12.bam~ ~override~ //Artillier: High Level Ability - Swift Aim - Stone BAM
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Artillier: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+	
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Artillier: Passive 4 - Restrict Armor
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_SHORT 0x1c "item_type" //Variable - "item_type": Set to item type
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x2b "item_exclusion_kit2" //Variable - "item_exclusion_kit2": Set to item kit usability
+		PATCH_IF (
+				(
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				("item_type" = 2)
+			AND
+				(
+				("item_exclusion" BAND 0b00000000001000000000000000000000) = 0b00000000000000000000000000000000)
+			AND
+				(
+				(("item_exclusion_kit2" BAND 0b000000001) = 0b00000001) OR
+				("item_exclusion_kit2" BAND 0b00000010) = 0b00000010)
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Artillier: Passive 4 - Restrict Armor - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (ARMOR type), (usable by single-class rangers), ((usable by Beastmaster kit) or (usable by Stalker kit)), and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Artillier: Passive 4 - Restrict Armor - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Artillier: Passive 4 - Restrict Armor - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@20200002) //Artillier: Passive 4 - Restrict Armor - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+
+	OUTER_SET "item_melee" = 0
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Artillier: Passive 5 - Restrict Weapons
+		SET "item_melee" = 0
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Artillier: Passive 5 - Restrict Weapons - Check every ability
+			READ_BYTE ("abilities_off" + 0x28 * "ability") "item_ability_type" //Variable - "item_ability_type": Set to item ability type
+			READ_BYTE ("abilities_off" + 0x28 * "ability" + 0x02) "item_ability_location" //Variable - "item_ability_location": Set to item ability location
+			PATCH_IF (("item_ability_type" = 1) AND ("item_ability_location" = 1)) THEN BEGIN //Artillier: Passive 5 - Restrict Weapons - Check if item has a MELEE ability AND is in WEAPON location
+				SET "item_melee" = 1 //Artillier: Passive 5 - Restrict Weapons - Item has ranged ability
+			END				 
+		END	
+		PATCH_IF (
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_exclusion" BAND 0b00000000001000000000000000000000) = 0b00000000000000000000000000000000)
+			AND 
+				(
+				("item_melee" = 1)
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Artillier: Passive 5 - Restrict Weapons - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (usable by single-class rangers), (melee ability) and without (ranged ability), (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Artillier: Passive 5 - Restrict Weapons - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Artillier: Passive 5 - Restrict Weapons - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@20200002) //Artillier: Passive 5 - Restrict Weapons - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Druid Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Defender	 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @401XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @40100000 DESIGNATED 401 //Component: Druid Kits - Defender
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet iwdee~ @103
+
+	OUTER_SET "fgkddefr_version" = 0
+	OUTER_WHILE ("fgkddefr_version" = 0) OR ("fgkddefr_version" > 2) BEGIN //Spell Selection: Set action to set spell selection
+		PRINT @40100007 //Spell Selection: Print choices
+		ACTION_READLN ~fgkddefr_version~ //Spell Selection: Input required
+	END
+
+	ACTION_IF ("fgkddefr_version" = 1) THEN BEGIN
+		LOAD_TRA ~FG_Kits\languages\english\old_defender.tra~
+		INCLUDE ~FG_Kits\DDefende\old_defender.tpa~
+	END
+	ELSE BEGIN
+
+	COPY_EXISTING ~CLABDR01.2da~ ~override\FGKDDefr.2da~ //Defender: Copy CLAB.2da from base druid
+	    REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL611~ ~****      ~ //CLAB.2da: Remove Shapeshift: Brown Bear 
+        REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL612~ ~****      ~ //CLAB.2da: Remove Shapeshift: Wolf
+        REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL613~ ~****      ~ //CLAB.2da: Remove Shapeshift: Brown Bear
+		COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+			COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+				SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+					PATCH_IF ("clabcol" < 50) THEN BEGIN //Defender: Check if CLAB.2da extended to 50
+						INSERT_2DA_ROW "clabrow1" 40 ~ABILITY%clabrow1%    GA_FGKDfS1  ****        GA_FGKDfS2  ****        GA_FGKDfS3  ****        GA_FGKDfS4  ****        GA_FGKDfS5  ****        GA_FGKDfS6  ****        GA_FGKDfS7  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Defender: Add Unique spells - CLAB.2da Max Level 40
+					END
+						ELSE BEGIN
+							INSERT_2DA_ROW "clabrow1" 50 ~ABILITY%clabrow1%    GA_FGKDfS1  ****        GA_FGKDfS2  ****        GA_FGKDfS3  ****        GA_FGKDfS4  ****        GA_FGKDfS5  ****        GA_FGKDfS6  ****        GA_FGKDfS7  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Defender: Add Unique spells - CLAB.2da Max Level 50
+						END
+						
+	
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15885  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19421 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	ACTION_IF ("rf_state" = 0) THEN BEGIN//Detection - Refinements: Refinements is not installed
+		COPY_EXISTING ~LuDr0.2da~ ~override\LuKDF.2da~ //Defender: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuDR4.2da~ ~override\LuKDF.2da~ //Defender: Copy LUA.2da from Avenger 
+				REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#COMD~ ~GA_TG#DIVN~ //Defender: Change Comet to Divine Shell
+		END
+			
+	//IMPORTANT: THE FOLLOWING IS DIRECTLY FROM DIVINE REMIX
+	ACTION_IF ((MOD_IS_INSTALLED ~DIVINE_REMIX/SETUP-DIVINE_REMIX.TP2~ ~1000~) AND // dr spheres installed
+			  (FILE_EXISTS ~divine_remix/lib/macros.tph~)) THEN BEGIN			 // sanity check for library
+		INCLUDE ~divine_remix/lib/macros.tph~
+		LAUNCH_ACTION_FUNCTION cd_kit_sphere
+		STR_VAR
+			table				   	= FGKDDefr // file name of your kit's clab table
+			class				   	= druid	// allowed values: cleric, paladin, ranger, druid
+			all					 	= major	  	// use major, minor, or none for each sphere (none can be deleted)
+			animal				  	= major
+			astral				  	= none
+			chaos				   	= none
+			charm				   	= none
+			combat				  	= none
+			creation				= none
+			divination			  	= none
+			elemental			   	= major
+			elemental_air		   	= major
+			elemental_earth		 	= major
+			elemental_fire		  	= major
+			elemental_water		 	= major
+			guardian				= none
+			healing				 	= major
+			law					 	= none
+			necromantic			 	= none
+			necromantic_restorative = major
+			numbers				 	= none
+			plant				   	= major
+			protection			  	= minor
+			summoning			   	= none
+			sun					 	= major
+			thoughts				= none
+			time					= none
+			travelers			   	= none
+			war					 	= none
+			wards				   	= none
+			weather				 	= major
+		END
+	END
+
+	COPY_EXISTING ~SPPR108.spl~ ~override~ //Invader: Original Resist Fear spell
+		READ_STRREF NAME1 "bonus_spell_lvl_1"
+	COPY_EXISTING ~SPPR201.spl~ ~override~ //Invader: Original Aid spell
+		READ_STRREF NAME1 "bonus_spell_lvl_2"
+	COPY_EXISTING ~SPPR307.spl~ ~override~ //Invader: Original Remove Curse spell
+		READ_STRREF NAME1 "bonus_spell_lvl_3"
+	COPY_EXISTING ~SPPR412.spl~ ~override~ //Invader: Original Divine Power spell
+		READ_STRREF NAME1 "bonus_spell_lvl_4"
+	COPY_EXISTING ~SPPR504.spl~ ~override~ //Invader: Original Raise Dead spell
+		READ_STRREF NAME1 "bonus_spell_lvl_5"
+	COPY_EXISTING ~SPPR612.spl~ ~override~ //Invader: Original Bolt of Glory spell
+		READ_STRREF NAME1 "bonus_spell_lvl_6"
+	COPY_EXISTING ~SPPR713.spl~ ~override~ //Invader: Original Greater Restoration spell
+		READ_STRREF NAME1 "bonus_spell_lvl_7"
+
+	OUTER_SPRINT "kit_name_upper" @40100003 //Variable - "kit_name_upper": Kit upper case name - Vanilla
+	OUTER_SPRINT "kit_text_block" @40100004  //Variable - "kit_text_block": Kit text - no Divine Remix
+	ACTION_IF ("dr_state" < 2) THEN BEGIN //Detection - DR and FNP: Vanilla
+		OUTER_SPRINT "kit_abilities_block" @40100005 //Variable - "kit_abilities_block": Kit abilities block - Vanilla
+	END
+		ELSE BEGIN
+			OUTER_SPRINT "kit_abilities_block" @40100006 //Variable - "kit_abilities_block": Kit abilities block - Vanilla
+		END
+	
+	OUTER_SPRINT "kit_description" @1000003 //Variable - "kit_description": Build complete description
+		
+	ADD_KIT ~FGKDDefende~ //Defender: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKDDefende				0		    0		    1		    1		    0		    1		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKDDefende		  		0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		  12		 15~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				2		 2		   2		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		   17		 17~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		   15		 15~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKDDefende				0	   	0	   	0	   	0	   	1	   	0	   	0	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKDDefende				1	    0	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKDDefr.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_D_H	K_D_D	K_D_G	K_D_E	K_D_HE	K_D_HL	K_D_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 11~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KDf~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG27 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @40100001
+		//Kit Name - Mixed case
+		SAY @40100002
+		//Kit description
+		SAY ~%kit_description%~
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKDDefende~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~134 7 130 99 112~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+		END
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~SPPR108.spl~ ~override\FGKDfS1.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Resist Fear spell to rename
+				  ~SPPR201.spl~ ~override\FGKDfS2.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Aid spell to rename
+				  ~SPPR307.spl~ ~override\FGKDfS3.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Remove Curse spell to rename
+				  ~SPPR412.spl~ ~override\FGKDfS4.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Divine Power spell to rename
+				  ~SPPR504.spl~ ~override\FGKDfS5.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Raise Dead spell to rename
+				  ~SPPR612.spl~ ~override\FGKDfS6.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Bolt of Glory spell to rename
+				  ~SPPR713.spl~ ~override\FGKDfS7.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Greater Restoration spell to rename
+		READ_LONG 0x1e "spell_exclusion" //Variable - "spell_exclusion"
+		WRITE_LONG 0x1e ("spell_exclusion" BAND 0b00111111111111111111111111111111) //Defender: Ability 1 - Cleric Casting - Erase exclusion flag for duid
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Defender: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Defender: Passive 1 - Restrict Weapons
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x31 "item_proficiency" //Variable - "item_proficiency": Set to item proficiency
+		PATCH_IF (
+				(
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_proficiency" = "96") OR 
+				("item_proficiency" = "95") OR 
+				("item_proficiency" = "98") OR 
+				("item_proficiency" = "106")
+				)
+			AND
+				(
+				("item_exclusion" BAND 0b01000000000000000000000000000000) = 0b00000000000000000000000000000000)
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Defender: Passive 1 - Restrict Weapons - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (DAGGER, SCIMITAR, SPEAR and DART proficiency), (usable by single-class Druids) and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Defender: Passive 1 - Restrict Weapons - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Defender: Passive 1 - Restrict Weapons - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@40100002) //Defender: Passive 1 - Restrict Weapons - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+	END
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Druid Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Invader	 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @402XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @40200000 DESIGNATED 402 //Component: Druid Kits - Invader
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet iwdee~ @103
+
+	COPY_EXISTING ~CLABDR01.2da~ ~override\FGKDInvr.2da~ //Invader: Copy CLAB.2da from base druid
+		COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+			COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+				SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+					PATCH_IF ("clabcol" < 50) THEN BEGIN //Invader: Check if CLAB.2da extended to 50
+						INSERT_2DA_ROW "clabrow1" 40 ~ABILITY%clabrow1%    GA_FGKIvS1  ****        GA_FGKIvS2  ****        GA_FGKIvS3  ****        GA_FGKIvS4  ****        GA_FGKIvS5  ****        GA_FGKIvS6  ****        GA_FGKIvS7  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Invader: Add Unique spells - CLAB.2da Max Level 40
+					END
+						ELSE BEGIN
+							INSERT_2DA_ROW "clabrow1" 50 ~ABILITY%clabrow1%    GA_FGKIvS1  ****        GA_FGKIvS2  ****        GA_FGKIvS3  ****        GA_FGKIvS4  ****        GA_FGKIvS5  ****        GA_FGKIvS6  ****        GA_FGKIvS7  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Invader: Add Unique spells - CLAB.2da Max Level 50
+						END
+						
+	
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15885  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19421 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	ACTION_IF ("rf_state" = 0) THEN BEGIN//Detection - Refinements: Refinements is not installed
+		COPY_EXISTING ~LuDr0.2da~ ~override\LuKIv.2da~ //Invader: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuDR4.2da~ ~override\LuKIv.2da~ //Invader: Copy LUA.2da from Avenger 
+				REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#COMD~ ~GA_SPPR722~ //Invader: Change Comet to Storm of Vengeance
+		END
+			
+	//IMPORTANT: THE FOLLOWING IS DIRECTLY FROM DIVINE REMIX
+	ACTION_IF ((MOD_IS_INSTALLED ~DIVINE_REMIX/SETUP-DIVINE_REMIX.TP2~ ~1000~) AND // dr spheres installed
+			  (FILE_EXISTS ~divine_remix/lib/macros.tph~)) THEN BEGIN			 // sanity check for library
+		INCLUDE ~divine_remix/lib/macros.tph~
+		LAUNCH_ACTION_FUNCTION cd_kit_sphere
+		STR_VAR
+			table				   	= FGKDInvr // file name of your kit's clab table
+			class				   	= druid	// allowed values: cleric, paladin, ranger, druid
+			all					 	= major	  	// use major, minor, or none for each sphere (none can be deleted)
+			animal				  	= major
+			astral				  	= none
+			chaos				   	= none
+			charm				   	= none
+			combat				  	= major
+			creation				= none
+			divination			  	= none
+			elemental			   	= major
+			elemental_air		   	= major
+			elemental_earth		 	= major
+			elemental_fire		  	= major
+			elemental_water		 	= major
+			guardian				= none
+			healing				 	= major
+			law					 	= none
+			necromantic			 	= none
+			necromantic_restorative = none
+			numbers				 	= none
+			plant				   	= major
+			protection			  	= none
+			summoning			   	= none
+			sun					 	= major
+			thoughts				= none
+			time					= none
+			travelers			   	= none
+			war					 	= minor
+			wards				   	= none
+			weather				 	= major
+		END
+	END
+
+	COPY_EXISTING ~SPPR102.spl~ ~override~ //Invader: Original Command spell
+		READ_STRREF NAME1 "bonus_spell_lvl_1"
+	COPY_EXISTING ~SPPR211.spl~ ~override~ //Invader: Original Silence spell
+		READ_STRREF NAME1 "bonus_spell_lvl_2"
+	COPY_EXISTING ~SPPR304.spl~ ~override~ //Invader: Original Glyph of Warding spell
+		READ_STRREF NAME1 "bonus_spell_lvl_3"
+	COPY_EXISTING ~SPPR405.spl~ ~override~ //Invader: Original Mental Domination spell
+		READ_STRREF NAME1 "bonus_spell_lvl_4"
+	COPY_EXISTING ~SPPR511.spl~ ~override~ //Invader: Original Slay Living spell
+		READ_STRREF NAME1 "bonus_spell_lvl_5"
+	COPY_EXISTING ~SPPR603.spl~ ~override~ //Invader: Original Blade Barrier spell
+		READ_STRREF NAME1 "bonus_spell_lvl_6"
+	COPY_EXISTING ~SPPR708.spl~ ~override~ //Invader: Original Finger of Death spell
+		READ_STRREF NAME1 "bonus_spell_lvl_7"
+
+	OUTER_SPRINT "kit_name_upper" @40200003 //Variable - "kit_name_upper": Kit upper case name - Vanilla
+	OUTER_SPRINT "kit_text_block" @40200004  //Variable - "kit_text_block": Kit text - no Divine Remix
+	ACTION_IF ("dr_state" < 2) THEN BEGIN //Detection - DR and FNP: Vanilla
+		OUTER_SPRINT "kit_abilities_block" @40200005 //Variable - "kit_abilities_block": Kit abilities block - Vanilla
+	END
+		ELSE BEGIN
+			OUTER_SPRINT "kit_abilities_block" @40200006 //Variable - "kit_abilities_block": Kit abilities block - Vanilla
+		END
+
+	OUTER_SPRINT "kit_description" @1000003 //Variable - "kit_description": Build complete description
+		
+	ADD_KIT ~FGKDInvader~ //Invader: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKDInvader				0		    0		    2		    2		    0		    2		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKDInvader		  		0 0 0 0 2 2 0 2 0 0 0 0 0 0 2 2 0 2 2 0 0 0 2 0 0 0 2 2 2 2 2 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDInvader				0		 0		   0		 0		  12		 15~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDInvader				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDInvader				0		 0		   0		 0		   17		 17~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDInvader				0		 0		   0		 0		   15		 15~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKDInvader				0	   	0	   	0	   	0	   	1	   	0	   	0	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKDInvader				1	    0	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKDInvr.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_D_H	K_D_D	K_D_G	K_D_E	K_D_HE	K_D_HL	K_D_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 11~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KIv~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG27 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @40200001
+		//Kit Name - Mixed case
+		SAY @40200002
+		//Kit description
+		SAY ~%kit_description%~
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKDInvader~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~134 130 7 99 112~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+		END
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~SPPR102.spl~ ~override\FGKIvS1.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Command spell to rename
+				  ~SPPR211.spl~ ~override\FGKIvS2.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Silence spell to rename
+				  ~SPPR304.spl~ ~override\FGKIvS3.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Glyph of Warding spell to rename
+				  ~SPPR405.spl~ ~override\FGKIvS4.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Mental Domination spell to rename
+				  ~SPPR511.spl~ ~override\FGKIvS5.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Slay Living spell to rename
+				  ~SPPR603.spl~ ~override\FGKIvS6.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Blade Barrier spell to rename
+				  ~SPPR708.spl~ ~override\FGKIvS7.spl~ //Invader: Ability 1 - Cleric Casting - Copy existing Finger of Death spell to rename
+		READ_LONG 0x1e "spell_exclusion" //Variable - "spell_exclusion"
+		WRITE_LONG 0x1e ("spell_exclusion" BAND 0b00111111111111111111111111111111) //Invader: Ability 1 - Cleric Casting - Erase exclusion flag for duid
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Invader: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Invader: Passive 1 - Restrict Armor
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1c "item_type" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x31 "item_proficiency" //Variable - "item_proficiency": Set to item proficiency
+		PATCH_IF (
+				(
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_type" = "2")
+				)
+			AND
+				(
+				("item_exclusion" BAND 0b01000000000000000000000000000000) = 0b00000000000000000000000000000000)
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Invader: Passive 1 - Restrict Armor - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (ARMOR type), (usable by single-class Druids) and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Invader: Passive 1 - Restrict Armor - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Invader: Passive 1 - Restrict Armor - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@40200002) //Invader: Passive 1 - Restrict Armor - Add mixed string to generated usability list
+					END
+			END
+		BUT_ONLY_IF_IT_CHANGES
+
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits			   		 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Trickster						 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @501XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @50100000 DESIGNATED 501 //Component: Thief Kits - Trickster
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15883  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19428 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	OUTER_SPRINT "kit_name_upper" @50100003 //Variable - "kit_name_upper": Kit upper case name
+	OUTER_SPRINT "kit_text_block" @50100004  //Variable - "kit_text_block": Kit text
+	OUTER_SPRINT "kit_abilities_block" @50100005 //Variable - "kit_abilities_block": Kit abilities block
+
+	OUTER_SPRINT "kit_description" @1000003 //Variable - "kit_description": Build complete description
+
+	COPY ~FG_Kits\TArcaTri\FGKTArTr.2da~ ~override~ //Trickster: Copy CLAB.2da
+	
+	ACTION_IF ("rf_state" = 0) THEN BEGIN
+		COPY_EXISTING ~LuTh0.2da~ ~override\LuKAT.2da~ //Trickster: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuTh2.2da~ ~override\LuKAT.2da~ //Trickster: Copy LUA.2da from Assassin
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#NPOI     *          *         1         99         1            GA_SPCL918   *             *~ ~GA_FGKATX1     *          *         1         99         4            *            *             *~ //Trickster: Change Nerve Poison to Arcane Tricks: Level 6
+		END
+
+
+	ADD_KIT ~FGKTArcaTri~ //Trickster: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKTArcaTri				1		    0		    1		    1		    0		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKTArcaTri		  		0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 1 1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTArcaTri				0		 9		   0		 7		   0		 0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTArcaTri				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTArcaTri				0		 17		   0		 15		   0		 0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTArcaTri				0		 15		   0		 13		   0		 0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKTArcaTri				0	   	0	   	0	   	1	   	1	   	1	   	1	   	1	   	1~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKTArcaTri				1	    1	    1	    0	    0	    0~
+		//CLAB file
+		~override\FGKTArTr.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_T_H K_T_D K_T_G K_T_E K_T_HE K_T_HL K_T_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 04~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KAT~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * * BAG28 RING06 RING05 * BOOT02 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 DAGG12 SW1H28 STAF08~
+		//Kit Name - Lower case
+		SAY @50100001
+		//Kit Name - Mixed case
+		SAY @50100002
+		//Kit description
+		SAY ~%kit_description%~
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKTArcaTri~
+				//Optional - Backstab progression
+				backstab = ~1 1 1 1 1 1 1 1 1 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3~
+				//Optional - Starting Thief Points | Level up Thief Points
+				thiefskl = ~25 15~
+				//Optional - Trap Limit
+				traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~24 46 17 2 43~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				sneakatt = ~1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6 6~
+				//Optional - IWD:EE Crippling Strike Entry
+				crippstr = ~0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5~
+		END
+		
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	ACTION_IF NOT ("sr_state" = 1) THEN BEGIN
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATS1.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 1 2DAs - Vanilla
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATS2.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 2 2DAs - Vanilla
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATS3.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 3 2DAs - Vanilla
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATS4.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 4 2DAs - Vanilla
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATS5.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 5 2DAs - Vanilla
+		COPY ~FG_Kits\TArcaTri\Vanilla\FGKATX1.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 6 2DAs - Vanilla
+	END
+		ELSE BEGIN
+			COPY ~FG_Kits\TArcaTri\SR\FGKATS1.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 1 2DAs - SR
+			COPY ~FG_Kits\TArcaTri\SR\FGKATS2.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 2 2DAs - SR
+			COPY ~FG_Kits\TArcaTri\SR\FGKATS3.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 3 2DAs - SR
+			COPY ~FG_Kits\TArcaTri\SR\FGKATS4.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 4 2DAs - SR
+			COPY ~FG_Kits\TArcaTri\SR\FGKATS5.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 5 2DAs - SR
+			COPY ~FG_Kits\TArcaTri\SR\FGKATX1.2da~ ~override~ //Trickster: Abilities - Arcane Trick Level 6 2DAs - SR
+		END
+	
+	
+	COPY ~FG_Kits\TArcaTri\FGKATS1.spl~ ~override~ //Trickster: Ability 1 - Arcane Trick: Level 1
+		SAY NAME1 @50100007 //Trickster: Ability 1 - Arcane Trick: Level 1 - Name
+		SAY UNIDENTIFIED_DESC @50100008 //Trickster: Ability 1 - Arcane Trick: Level 1 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATS11.bam~ ~override~ //Trickster: Ability 1 - Arcane Trick: Level 1 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATS12.bam~ ~override~ //Trickster: Ability 1 - Arcane Trick: Level 1 - Stone BAM
+		
+	COPY ~FG_Kits\TArcaTri\FGKATS2.spl~ ~override~ //Trickster: Ability 2 - Arcane Trick: Level 2
+		SAY NAME1 @50100009 //Trickster: Ability 2 - Arcane Trick: Level 2 - Name
+		SAY UNIDENTIFIED_DESC @50100010 //Trickster: Ability 2 - Arcane Trick: Level 2 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATS21.bam~ ~override~ //Trickster: Ability 2 - Arcane Trick: Level 2 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATS22.bam~ ~override~ //Trickster: Ability 2 - Arcane Trick: Level 2 - Stone BAM
+
+	COPY ~FG_Kits\TArcaTri\FGKATS3.spl~ ~override~ //Trickster: Ability 3 - Arcane Trick: Level 3
+		SAY NAME1 @50100011 //Trickster: Ability 3 - Arcane Trick: Level 3 - Name
+		SAY UNIDENTIFIED_DESC @50100012 //Trickster: Ability 3 - Arcane Trick: Level 3 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATS31.bam~ ~override~ //Trickster: Ability 3 - Arcane Trick: Level 3 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATS32.bam~ ~override~ //Trickster: Ability 3 - Arcane Trick: Level 3 - Stone BAM
+
+	COPY ~FG_Kits\TArcaTri\FGKATS4.spl~ ~override~ //Trickster: Ability 4 - Arcane Trick: Level 4
+		SAY NAME1 @50100013 //Trickster: Ability 4 - Arcane Trick: Level 4 - Name
+		SAY UNIDENTIFIED_DESC @50100014 //Trickster: Ability 4 - Arcane Trick: Level 4 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATS41.bam~ ~override~ //Trickster: Ability 4 - Arcane Trick: Level 4 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATS42.bam~ ~override~ //Trickster: Ability 4 - Arcane Trick: Level 4 - Stone BAM
+
+	COPY ~FG_Kits\TArcaTri\FGKATS5.spl~ ~override~ //Trickster: Ability 5 - Arcane Trick: Level 5
+		SAY NAME1 @50100015 //Trickster: Ability 5 - Arcane Trick: Level 5 - Name
+		SAY UNIDENTIFIED_DESC @50100016 //Trickster: Ability 5 - Arcane Trick: Level 5 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATS51.bam~ ~override~ //Trickster: Ability 5 - Arcane Trick: Level 5 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATS52.bam~ ~override~ //Trickster: Ability 5 - Arcane Trick: Level 5 - Stone BAM
+
+	COPY ~FG_Kits\TArcaTri\FGKATX1.spl~ ~override~ //Trickster: High Level Ability - Arcane Trick: Level 6
+		SAY NAME1 @50100017 //Trickster: High Level Ability - Arcane Trick: Level 6 - Name
+		SAY UNIDENTIFIED_DESC @50100018 //Trickster: High Level Ability - Arcane Trick: Level 6 - Description
+		COPY ~FG_Kits\TArcaTri\FGKATX11.bam~ ~override~ //Trickster: High Level Ability - Arcane Trick: Level 6 - Clear BAM
+		COPY ~FG_Kits\TArcaTri\FGKATX12.bam~ ~override~ //Trickster: High Level Ability - Arcane Trick: Level 6 - Stone BAM
+		
+	COPY ~FG_Kits\TArcaTri\FGKATS1.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+		 ~FG_Kits\TArcaTri\FGKATS2.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+		 ~FG_Kits\TArcaTri\FGKATS3.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+		 ~FG_Kits\TArcaTri\FGKATS4.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+		 ~FG_Kits\TArcaTri\FGKATS5.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+		 ~FG_Kits\TArcaTri\FGKATX1.eff~ ~override~ //Trickster: Passive 1 - Restrict Tricks - Restriction effect
+			WRITE_LONG 0x1c RESOLVE_STR_REF (@50100006) //Trickster: Passive 1 - Restrict Tricks - Add effect string
+		
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Trickster: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+		
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Trickster: Passive 1 - Restrict Tricks 
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_SHORT 0x1c "item_type" //Variable - "item_flags": Set to item type
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x29 "item_exclusion_kit1" //Variable - "item_proficiency": Set to item kit usability
+		PATCH_IF (
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_type" = "2")
+				)
+			AND
+				(
+				(("item_exclusion" BAND 0b00000000010000000000000000000000) = 0b00000000000000000000000000000000)
+				)
+			AND
+				(
+				(("item_exclusion_kit1" BAND 0b00100000) = 0b00100000))
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Trickster: Passive 1 - Restrict Tricks - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (ARMOR type), (usable by single-class thieves), (unusable by Avengers) and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATS1~ //Variable - "resource": Set to ~FGKATS1~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATS2~ //Variable - "resource": Set to ~FGKATS2~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATS3~ //Variable - "resource": Set to ~FGKATS3~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATS4~ //Variable - "resource": Set to ~FGKATS4~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATS5~ //Variable - "resource": Set to ~FGKATS5~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+			SET opcode = "177" //Variable - "opcode": Set to 177 (Use EFF File)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~FGKATX1~ //Variable - "resource": Set to ~FGKATX1~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Trickster: Passive 1 - Restrict Tricks - Add restrict effect to items
+		END
+		BUT_ONLY_IF_IT_CHANGES
+/*
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits			   		 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 [Kit Name]				 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @5XXXXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @5XX00000 DESIGNATED 5XX //Component: Thief Kits - [Kit Name]
+
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15883  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN	
+					OUTER_SET "bio_entry" = 19428 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+	
+
+	ADD_KIT ~FGK[KitName]~ //[Kit Name]: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGK[KitName]				1		    0		    1		    1		    0		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGK[KitName]		  		0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 1 1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 9		   0		 0		   0		 0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 17		   0		 0		   0		 0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGK[KitName]				0		 15		   0		 0		   0		 0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGK[KitName]				0	   	1	   	1	   	1	   	1	   	1	   	1	   	1	   	1~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGK[KitName]				1	    1	    1	    0	    0	    0~
+		//CLAB file
+		~override\FGK[XXxXx].2da~
+		//Races and Classes - KITTABLE.2da
+		~[KITTABLE]~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 04~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~K[XX]~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * * BAG28 RING06 RING05 * BOOT02 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 DAGG12 SW1H28 STAF08~
+		//Kit Name - Lower case
+		SAY @5XX00001
+		//Kit Name - Mixed case
+		SAY @5XX00002
+		//Kit description
+		SAY @5XX00003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGK[KitName]~
+				//Optional - Backstab progression
+				backstab = ~1 2 2 2 2 3 3 3 3 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 ~
+				//Optional - Starting Thief Points | Level up Thief Points
+				thiefskl = ~40 20~
+				//Optional - Trap Limit
+				traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~35 67 67 25 80~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				//sneakatt = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+				//Optional - IWD:EE Crippling Strike Entry
+				//crippstr = ~1 2 3 4 5 6 7 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9~
+		END
+		
+*/		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits			   		 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Novice						 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @503XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @50300000 DESIGNATED 503 //Component: Thief Kits - [Kit Name]
+
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15883  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19428 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	COPY ~FG_Kits\TNovice\FGKTNvce.2da~ ~override~ //Novice: Copy CLAB.2da
+	
+	ACTION_IF ("rf_state" = 0) THEN BEGIN
+		COPY_EXISTING ~LuTh0.2da~ ~override\LuKNv.2da~ //Novice: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuTh2.2da~ ~override\LuKNv.2da~ //Novice: Copy LUA.2da from Assassin
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#NPOI     *          *         1         99         1            GA_SPCL918   *             *~ ~AP_FGKNvX1     *          *         1         99         1            *            *             *~ //Novice: Change Nerve Poison to Oakheart
+		END
+
+	ADD_KIT ~FGKTNovice~ //[Kit Name]: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKTNovice					1		    0		    1		    1		    0		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKTNovice		  			0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 1 1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTNovice					0		 9		   0		 0		   0		 0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTNovice					0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTNovice					0		 17		   0		 0		   0		 0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTNovice					0		 15		   0		 0		   0		 0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKTNovice					1	   	1	   	1	   	1	   	1	   	1	   	1	   	1	   	1~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKTNovice					0	    1	    1	    0	    0	    0~
+		//CLAB file
+		~override\FGKTNvce.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_T_H K_T_D K_T_G K_T_E K_T_HE K_T_HL K_T_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 04~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KNv~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * * BAG28 RING06 RING05 * BOOT02 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 DAGG12 SW1H28 STAF08~
+		//Kit Name - Lower case
+		SAY @50300001
+		//Kit Name - Mixed case
+		SAY @50300002
+		//Kit description
+		SAY @50300003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKTNovice~
+				//Optional - Backstab progression
+				backstab = ~1 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4~
+				//Optional - Starting Thief Points | Level up Thief Points
+				thiefskl = ~40 20~
+				//Optional - Trap Limit
+				traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~24 99 169 2 93~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				sneakatt = ~1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6 6 7 7 7 7 7~
+				//Optional - IWD:EE Crippling Strike Entry
+				crippstr = ~0 0 0 0 0 0 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6~
+		END
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+
+	COPY ~FG_Kits\TNovice\FGKNvP1.spl~ ~override~ //Novice: Passive 1 - Bonus Level 1 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP2.spl~ ~override~ //Novice: Passive 2 - Bonus Level 2 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP3.spl~ ~override~ //Novice: Passive 3 - Bonus Level 3 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP4.spl~ ~override~ //Novice: Passive 4 - Bonus Level 4 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP5.spl~ ~override~ //Novice: Passive 5 - Bonus Level 5 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP6.spl~ ~override~ //Novice: Passive 6 - Bonus Level 6 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP7.spl~ ~override~ //Novice: Passive 7 - Bonus Level 7 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP8.spl~ ~override~ //Novice: Passive 8 - Bonus Level 8 Spells
+	COPY ~FG_Kits\TNovice\FGKNvP9.spl~ ~override~ //Novice: Passive 9 - Bonus Level 9 Spells
+	COPY ~FG_Kits\TNovice\FGKNvPA.spl~ ~override~ //Novice: Passive 10 - Bonus Casting Speed
+	COPY ~FG_Kits\TNovice\FGKNvPB.spl~ ~override~ //Novice: Passive 11 - Experience Penalty
+		COPY ~FG_Kits\TNovice\FGKNvPB.eff~ ~override~ //Novice: Passive 11 - Experience Penalty Effect
+		
+	COPY ~FG_Kits\TNovice\FGKNvX1.spl~ ~override~ //Novice: High Level Ability - Inspiration
+		SAY NAME1 @50300004
+		SAY UNIDENTIFIED_DESC @50300005
+		READ_LONG  0x64 "abilities_off" //Variable - "abilities_off": Set to abilities offset
+		READ_SHORT 0x68 "num_abilities" //Variable - "num_abilities": Set to number of abilities
+		READ_LONG  0x6A "effects_off" //Variable - "effects_off": Set to effects offset
+		FOR (ability = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every ability
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x1e) "num_features" //Variable - "num_features": Set to number of features
+			READ_SHORT ("abilities_off" + 0x28 * "ability" + 0x20) "features_ind" //Variable - "features_ind": Set to start of features 
+			FOR (effect = 0; effect < "num_features"; "effect" += 1) BEGIN //Forest Warden: Ability 1 - Ingrain - Check every effect
+				READ_SHORT ("effects_off" + 0x30 * (features_ind + "effect") + 0x00) "opcode" //Variable - "opcode": Set to opcode offset
+				PATCH_IF ("opcode" = 139) BEGIN //Forest Warden: Ability 1 - Ingrain - Part 1 - Check effect opcodes
+					WRITE_LONG ("effects_off" + 0x30 * (features_ind + "effect") + 0x04) RESOLVE_STR_REF (@50300006) //Novice: High Level Ability - Inspiration - Effect String
+				END
+			END
+		END	
+//		COPY ~FG_Kits\TNovice\FGKNvX11.bam~ ~override~ //Novice: High Level Ability - Inspiration - Clear BAM
+		COPY ~FG_Kits\TNovice\FGKNvX12.bam~ ~override~ //Novice: High Level Ability - Inspiration - Stone BAM
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits			   		 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Agent						 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @508XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @50800000 DESIGNATED 508 //Component: Thief Kits - Agent
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15883  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19428 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	OUTER_SPRINT "kit_name_upper" @50800003 //Variable - "kit_name_upper": Kit upper case name
+	OUTER_SPRINT "kit_text_block" @50800004  //Variable - "kit_text_block": Kit text
+	OUTER_SPRINT "kit_abilities_block" @50800005 //Variable - "kit_abilities_block": Kit abilities block
+
+	OUTER_SPRINT "kit_description" @1000003 //Variable - "kit_description": Build complete description
+
+	COPY ~FG_Kits\TDiviAge\FGKTDiAg.2da~ ~override~ //Agent: Copy CLAB.2da
+	
+	ACTION_IF ("rf_state" = 0) THEN BEGIN
+		COPY_EXISTING ~LuTh0.2da~ ~override\LuKDA.2da~ //Agent: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuTh2.2da~ ~override\LuKDA.2da~ //Agent: Copy LUA.2da from Assassin
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#NPOI     *          *         1         99         1            GA_SPCL918   *             *~ ~GA_FGKDAX1     *          *         1         99         3            *            *             *~ //Agent: Change Nerve Poison to Divine Act: Level 6
+		END
+
+
+	ADD_KIT ~FGKTDiviAge~ //Agent: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKTDiviAge				1		    0		    1		    1		    0		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKTDiviAge		  		0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 1 1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTDiviAge				0		 9		   0		 0		   7		 0~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTDiviAge				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTDiviAge				0		 17		   0		 0		   15		 0~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTDiviAge				0		 15		   0		 0		   13		 0~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKTDiviAge				1	   	1	   	1	   	1	   	1	   	1	   	0	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKTDiviAge				1	    1	    1	    0	    0	    0~
+		//CLAB file
+		~override\FGKTDiAg.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_T_H K_T_D K_T_G K_T_E K_T_HE K_T_HL K_T_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 04~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KDA~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * * BAG28 RING06 RING05 * BOOT02 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 DAGG12 SW1H28 STAF08~
+		//Kit Name - Lower case
+		SAY @50800001
+		//Kit Name - Mixed case
+		SAY @50800002
+		//Kit description
+		SAY ~%kit_description%~
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKTDiviAge~
+				//Optional - Backstab progression
+				backstab = ~1 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4~
+				//Optional - Starting Thief Points | Level up Thief Points
+				thiefskl = ~30 20~
+				//Optional - Trap Limit
+				traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~24 28 169 2 24~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				sneakatt = ~1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6 6 7 7 7 7 7~
+				//Optional - IWD:EE Crippling Strike Entry
+				crippstr = ~0 0 0 0 0 0 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6~
+		END
+		
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	ACTION_IF NOT ("sr_state" = 1) THEN BEGIN
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAS1.2da~ ~override~ //Agent: Abilities - Divine Act Level 1 2DAs - Vanilla
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAS2.2da~ ~override~ //Agent: Abilities - Divine Act Level 2 2DAs - Vanilla
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAS3.2da~ ~override~ //Agent: Abilities - Divine Act Level 3 2DAs - Vanilla
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAS4.2da~ ~override~ //Agent: Abilities - Divine Act Level 4 2DAs - Vanilla
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAS5.2da~ ~override~ //Agent: Abilities - Divine Act Level 5 2DAs - Vanilla
+		COPY ~FG_Kits\TDiviAge\Vanilla\FGKDAX1.2da~ ~override~ //Agent: Abilities - Divine Act Level 6 2DAs - Vanilla
+	END
+		ELSE BEGIN
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAS1.2da~ ~override~ //Agent: Abilities - Divine Act Level 1 2DAs - SR
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAS2.2da~ ~override~ //Agent: Abilities - Divine Act Level 2 2DAs - SR
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAS3.2da~ ~override~ //Agent: Abilities - Divine Act Level 3 2DAs - SR
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAS4.2da~ ~override~ //Agent: Abilities - Divine Act Level 4 2DAs - SR
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAS5.2da~ ~override~ //Agent: Abilities - Divine Act Level 5 2DAs - SR
+			COPY ~FG_Kits\TDiviAge\SR\FGKDAX1.2da~ ~override~ //Agent: Abilities - Divine Act Level 6 2DAs - SR
+		END
+	
+	
+	COPY ~FG_Kits\TDiviAge\FGKDAS1.spl~ ~override~ //Agent: Ability 1 - Divine Act: Level 1
+		SAY NAME1 @50800006 //Agent: Ability 1 - Divine Act: Level 1 - Name
+		SAY UNIDENTIFIED_DESC @50800007 //Agent: Ability 1 - Divine Act: Level 1 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAS11.bam~ ~override~ //Agent: Ability 1 - Divine Act: Level 1 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAS12.bam~ ~override~ //Agent: Ability 1 - Divine Act: Level 1 - Stone BAM
+		
+	COPY ~FG_Kits\TDiviAge\FGKDAS2.spl~ ~override~ //Agent: Ability 2 - Divine Act: Level 2
+		SAY NAME1 @50800008 //Agent: Ability 2 - Divine Act: Level 2 - Name
+		SAY UNIDENTIFIED_DESC @50800009 //Agent: Ability 2 - Divine Act: Level 2 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAS21.bam~ ~override~ //Agent: Ability 2 - Divine Act: Level 2 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAS22.bam~ ~override~ //Agent: Ability 2 - Divine Act: Level 2 - Stone BAM
+
+	COPY ~FG_Kits\TDiviAge\FGKDAS3.spl~ ~override~ //Agent: Ability 3 - Divine Act: Level 3
+		SAY NAME1 @50800010 //Agent: Ability 3 - Divine Act: Level 3 - Name
+		SAY UNIDENTIFIED_DESC @50800011 //Agent: Ability 3 - Divine Act: Level 3 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAS31.bam~ ~override~ //Agent: Ability 3 - Divine Act: Level 3 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAS32.bam~ ~override~ //Agent: Ability 3 - Divine Act: Level 3 - Stone BAM
+
+	COPY ~FG_Kits\TDiviAge\FGKDAS4.spl~ ~override~ //Agent: Ability 4 - Divine Act: Level 4
+		SAY NAME1 @50800012 //Agent: Ability 4 - Divine Act: Level 4 - Name
+		SAY UNIDENTIFIED_DESC @50800013 //Agent: Ability 4 - Divine Act: Level 4 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAS41.bam~ ~override~ //Agent: Ability 4 - Divine Act: Level 4 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAS42.bam~ ~override~ //Agent: Ability 4 - Divine Act: Level 4 - Stone BAM
+
+	COPY ~FG_Kits\TDiviAge\FGKDAS5.spl~ ~override~ //Agent: Ability 5 - Divine Act: Level 5
+		SAY NAME1 @50800014 //Agent: Ability 5 - Divine Act: Level 5 - Name
+		SAY UNIDENTIFIED_DESC @50800015 //Agent: Ability 5 - Divine Act: Level 5 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAS51.bam~ ~override~ //Agent: Ability 5 - Divine Act: Level 5 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAS52.bam~ ~override~ //Agent: Ability 5 - Divine Act: Level 5 - Stone BAM
+
+	COPY ~FG_Kits\TDiviAge\FGKDAX1.spl~ ~override~ //Agent: High Level Ability - Divine Act: Level 6
+		SAY NAME1 @50800016 //Agent: High Level Ability - Divine Act: Level 6 - Name
+		SAY UNIDENTIFIED_DESC @50800017 //Agent: High Level Ability - Divine Act: Level 6 - Description
+		COPY ~FG_Kits\TDiviAge\FGKDAX11.bam~ ~override~ //Agent: High Level Ability - Divine Act: Level 6 - Clear BAM
+		COPY ~FG_Kits\TDiviAge\FGKDAX12.bam~ ~override~ //Agent: High Level Ability - Divine Act: Level 6 - Stone BAM
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits			   		 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Seeker							 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @509XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+BEGIN @50900000 DESIGNATED 509 //Component: Thief Kits - Seeker
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15883  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19428 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	OUTER_SPRINT "kit_name_upper" @50900003 //Variable - "kit_name_upper": Kit upper case name
+	OUTER_SPRINT "kit_text_block" @50900004  //Variable - "kit_text_block": Kit text
+	OUTER_SPRINT "kit_abilities_block" @50900005 //Variable - "kit_abilities_block": Kit abilities block
+
+	OUTER_SPRINT "kit_description" @1000003 //Variable - "kit_description": Build complete description
+
+	COPY ~FG_Kits\TPrimSee\FGKTPrSe.2da~ ~override~ //Seeker: Copy CLAB.2da
+	
+	ACTION_IF ("rf_state" = 0) THEN BEGIN
+		COPY_EXISTING ~LuTh0.2da~ ~override\LuKPS.2da~ //Seeker: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuTh2.2da~ ~override\LuKPS.2da~ //Seeker: Copy LUA.2da from Assassin
+			REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#NPOI     *          *         1         99         1            GA_SPCL918   *             *~ ~GA_FGKPSX1     *          *         1         99         3            *            *             *~ //Novice: Change Nerve Poison to Divine Act: Level 6
+		END
+
+
+	ADD_KIT ~FGKTPrimSee~ //Seeker: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKTPrimSee				1		    0		    1		    1		    0		    0		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKTPrimSee		  		0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 1 1 0 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTPrimSee				0		 9		   0		 0		   7		 5~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTPrimSee				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTPrimSee				0		 17		   0		 0		   15		 13~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKTPrimSee				0		 15		   0		 0		   13		 11~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKTPrimSee				0	   	1	   	0	   	1	   	1	   	1	   	0	   	1	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKTPrimSee				1	    1	    1	    0	    0	    0~
+		//CLAB file
+		~override\FGKTPrSe.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_T_H K_T_D K_T_G K_T_E K_T_HE K_T_HL K_T_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 04~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KPS~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT14 * * BAG28 RING06 RING05 * BOOT02 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 DAGG12 SW1H28 STAF08~
+		//Kit Name - Lower case
+		SAY @50900001
+		//Kit Name - Mixed case
+		SAY @50900002
+		//Kit description
+		SAY ~%kit_description%~
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKTPrimSee~
+				//Optional - Backstab progression
+				backstab = ~1 1 1 1 1 1 1 1 1 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3~
+				//Optional - Starting Thief Points | Level up Thief Points
+				thiefskl = ~30 20~
+				//Optional - Trap Limit
+				traplimt = ~6~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~24 141 169 2 138~
+				//Optional - Thief Point Minimums - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				//clasiskl = ~10 10 10 10 10 10 10~
+				//Optional - Thief Point Percentages - Pick Pockets | Open Locks | Find Traps | Move Silently | Hide in Shadows | Detect Illusion | Set Traps
+				thiefscl = ~100 100 100 100 100 100 100 100~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Race Selection boolean - HUMAN | ELF | HALF_ELF | DWARF| HALFLING | GNOME | HALFORC
+				//clsrcreq = ~1 1 1 1 1 1 1~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+				//Optional - IWD:EE Sneak Attack Entry
+				sneakatt = ~1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6 6~
+				//Optional - IWD:EE Crippling Strike Entry
+				crippstr = ~0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5~
+		END
+		
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	ACTION_IF NOT ("sr_state" = 1) THEN BEGIN
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSS1.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 1 2DAs - Vanilla
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSS2.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 2 2DAs - Vanilla
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSS3.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 3 2DAs - Vanilla
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSS4.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 4 2DAs - Vanilla
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSS5.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 5 2DAs - Vanilla
+		COPY ~FG_Kits\TPrimSee\Vanilla\FGKPSX1.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 6 2DAs - Vanilla
+	END
+		ELSE BEGIN
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSS1.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 1 2DAs - SR
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSS2.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 2 2DAs - SR
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSS3.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 3 2DAs - SR
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSS4.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 4 2DAs - SR
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSS5.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 5 2DAs - SR
+			COPY ~FG_Kits\TPrimSee\SR\FGKPSX1.2da~ ~override~ //Seeker: Abilities - Primal Whisper Level 6 2DAs - SR
+		END
+	
+	
+	COPY ~FG_Kits\TPrimSee\FGKPSS1.spl~ ~override~ //Seeker: Ability 1 - Primal Whisper: Level 1
+		SAY NAME1 @50900006 //Seeker: Ability 1 - Primal Whisper: Level 1 - Name
+		SAY UNIDENTIFIED_DESC @50900007 //Seeker: Ability 1 - Primal Whisper: Level 1 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSS11.bam~ ~override~ //Seeker: Ability 1 - Primal Whisper: Level 1 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSS12.bam~ ~override~ //Seeker: Ability 1 - Primal Whisper: Level 1 - Stone BAM
+		
+	COPY ~FG_Kits\TPrimSee\FGKPSS2.spl~ ~override~ //Seeker: Ability 2 - Primal Whisper: Level 2
+		SAY NAME1 @50900008 //Seeker: Ability 2 - Primal Whisper: Level 2 - Name
+		SAY UNIDENTIFIED_DESC @50900009 //Seeker: Ability 2 - Primal Whisper: Level 2 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSS21.bam~ ~override~ //Seeker: Ability 2 - Primal Whisper: Level 2 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSS22.bam~ ~override~ //Seeker: Ability 2 - Primal Whisper: Level 2 - Stone BAM
+
+	COPY ~FG_Kits\TPrimSee\FGKPSS3.spl~ ~override~ //Seeker: Ability 3 - Primal Whisper: Level 3
+		SAY NAME1 @50900010 //Seeker: Ability 3 - Primal Whisper: Level 3 - Name
+		SAY UNIDENTIFIED_DESC @50900011 //Seeker: Ability 3 - Primal Whisper: Level 3 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSS31.bam~ ~override~ //Seeker: Ability 3 - Primal Whisper: Level 3 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSS32.bam~ ~override~ //Seeker: Ability 3 - Primal Whisper: Level 3 - Stone BAM
+
+	COPY ~FG_Kits\TPrimSee\FGKPSS4.spl~ ~override~ //Seeker: Ability 4 - Primal Whisper: Level 4
+		SAY NAME1 @50900012 //Seeker: Ability 4 - Primal Whisper: Level 4 - Name
+		SAY UNIDENTIFIED_DESC @50900013 //Seeker: Ability 4 - Primal Whisper: Level 4 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSS41.bam~ ~override~ //Seeker: Ability 4 - Primal Whisper: Level 4 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSS42.bam~ ~override~ //Seeker: Ability 4 - Primal Whisper: Level 4 - Stone BAM
+
+	COPY ~FG_Kits\TPrimSee\FGKPSS5.spl~ ~override~ //Seeker: Ability 5 - Primal Whisper: Level 5
+		SAY NAME1 @50900014 //Seeker: Ability 5 - Primal Whisper: Level 5 - Name
+		SAY UNIDENTIFIED_DESC @50900015 //Seeker: Ability 5 - Primal Whisper: Level 5 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSS51.bam~ ~override~ //Seeker: Ability 5 - Primal Whisper: Level 5 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSS52.bam~ ~override~ //Seeker: Ability 5 - Primal Whisper: Level 5 - Stone BAM
+
+	COPY ~FG_Kits\TPrimSee\FGKPSX1.spl~ ~override~ //Seeker: High Level Ability - Primal Whisper: Level 6
+		SAY NAME1 @50900016 //Seeker: High Level Ability - Primal Whisper: Level 6 - Name
+		SAY UNIDENTIFIED_DESC @50900017 //Seeker: High Level Ability - Primal Whisper: Level 6 - Description
+		COPY ~FG_Kits\TPrimSee\FGKPSX11.bam~ ~override~ //Seeker: High Level Ability - Primal Whisper: Level 6 - Clear BAM
+		COPY ~FG_Kits\TPrimSee\FGKPSX12.bam~ ~override~ //Seeker: High Level Ability - Primal Whisper: Level 6 - Stone BAM
+
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Sorcerer Kits			   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Tamed Sorcerer					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @701XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/*
+BEGIN @70100000 DESIGNATED 701 //Component: Sorcerer Kits - Tamed Sorcerer
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet iwdee~ @103
+
+	COPY ~FG_Kits\STameSor\FGKSTSr.2da~ ~override~
+	
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 31495  //Variable - "bio_entry": set to BG1 Sorcerer bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 40284 //Variable - "bio_entry": set to IWD Sorcerer bio String
+				END
+		END
+	
+	COPY_EXISTING ~LuMa0.2da~ ~override\LuKTS.2da~
+		COUNT_2DA_COLS "lucol" //Variable - "lucol": Count number of Lu.2da columns
+			COUNT_2DA_ROWS "lucol" "lurow" //Variable - "lurow": Count number of Lu.2da rows
+				SET "lurow1" = ("lurow" + 1) //Variable - "lurow1": Set to existing rows +1
+				SET "lucol1" = ("lucol" - 1) //Variable - "lucol1": Set to existing rows -1
+					REMOVE_2DA_ROW "lurow" "lucol1"
+						INSERT_2DA_ROW "lurow" "lucol1" ~%lurow%      GA_FGKSEr9     *          *         1         99         1            *            *             *~
+	
+	ADD_KIT ~FGKSTameSor~ //Kit: Internal Name
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKSTameSor				0		    0		    1		    1		    0		    1		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKSTameSor	  			0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKSTameSor				0		 0		   0		 0		  12		 15~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKSTameSor				0		 0		   0		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKSTameSor				0		 0		   0		 0		   17		 17~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKSTameSor				0		 0		   0		 0		   15		 15~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKSTameSor			 	1	   	 1	   	 1	   	 1	   	 1	   	 1	   	 0	   	 0	   	 0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKSTameSor				1	    0	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKSTSr.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_S_H    K_S_D   K_S_G   K_S_E   K_S_HE   K_S_HL   K_S_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 19~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KTS~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG27 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @70100001
+		//Kit Name - Mixed case
+		SAY @70100002
+		//Kit description
+		SAY @70100003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKSTameSor~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~35 67 67 25 80~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+		END
+		
+	COPY ~FG_Kits\STameSor\FGKSTSZ.spl~ ~override~ //Kit Features: Passive Penalty - Lowered Casting Speed
+
+	COPY ~FG_Kits\STameSor\FGKSTSA.spl~ ~override~ //Kit Features: Arcane Conversion X - Spell File
+		SAY NAME1 @70100004
+		SAY UNIDENTIFIED_DESC @70100005
+			COPY ~FG_Kits\STameSor\FGKSTSA1.bam~ ~override~ //Kit Features: Arcane Conversion X - Clear icon
+			COPY ~FG_Kits\STameSor\FGKSTSA2.bam~ ~override~ //Kit Features: Arcane Conversion X - Stone icon
+
+			COPY ~FG_Kits\STameSor\FGKSTS1.2da~ ~override~ //Kit Features: Arcane Conversion X - 2da file
+				REPLACE_TEXTUALLY ~~ ~~
+				
+*/

@@ -1,0 +1,199 @@
+COPY_EXISTING ~CLABDR01.2da~ ~override\FGKDDef.2da~ //Defender: Copy CLAB.2da from base druid
+	    REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL611~ ~****      ~ //CLAB.2da: Remove Shapeshift: Brown Bear 
+        REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL612~ ~****      ~ //CLAB.2da: Remove Shapeshift: Wolf
+        REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_SPCL613~ ~****      ~ //CLAB.2da: Remove Shapeshift: Brown Bear
+		COUNT_2DA_COLS "clabcol" //Variable - "clabcol": Count number of CLAB.2da columns
+			COUNT_2DA_ROWS "clabcol" "clabrow" //Variable - "clabrow": Count number of CLAB.2da rows
+				SET "clabrow1" = ("clabrow" + 1) //Variable - "clabrow1": Set to existing rows +1
+					PATCH_IF ("clabcol" < 50) THEN BEGIN //Defender: Check if CLAB.2da extended to 50
+						INSERT_2DA_ROW "clabrow1" 40 ~ABILITY%clabrow1%    GA_FGKDDfA  ****        GA_FGKDDfB  ****        GA_FGKDDfC  ****        GA_FGKDDfD  ****        GA_FGKDDfE  ****        GA_FGKDDfF  ****        GA_FGKDDfG  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Defender: Add Unique spells - CLAB.2da Max Level 40
+					END
+						ELSE BEGIN
+							INSERT_2DA_ROW "clabrow1" 50 ~ABILITY%clabrow1%    GA_FGKDDfA  ****        GA_FGKDDfB  ****        GA_FGKDDfC  ****        GA_FGKDDfD  ****        GA_FGKDDfE  ****        GA_FGKDDfF  ****        GA_FGKDDfG  ****        ****        ****        ****        ****        ****        ****   ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****~ //Defender: Add Unique spells - CLAB.2da Max Level 50
+						END
+						
+	
+	//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+	ACTION_IF GAME_IS ~bgee eet~ THEN BEGIN  //Set bio_entry for fl#add_kit_ee macro 
+		OUTER_SET "bio_entry" = 15885  //Variable - "bio_entry": set to BG1:EE class bio string
+	END
+		ELSE BEGIN
+			ACTION_IF GAME_IS ~bg2ee~ THEN BEGIN
+				OUTER_SET "bio_entry" = "blank" //Variable - "bio_entry": set to "blank"
+			END
+				ELSE BEGIN
+					OUTER_SET "bio_entry" = 19421 //Variable - "bio_entry": set to IWD:EE class bio string
+				END
+		END
+
+	ACTION_IF ("rf_state" = 0) THEN BEGIN//Detection - Refinements: Refinements is not installed
+		COPY_EXISTING ~LuDr0.2da~ ~override\LuKDF.2da~ //Defender: Copy LUA.2da from base class
+	END
+		ELSE BEGIN
+			COPY_EXISTING ~LuDR4.2da~ ~override\LuKDF.2da~ //Defender: Copy LUA.2da from Avenger 
+				REPLACE_TEXTUALLY CASE_SENSITIVE EXACT_MATCH ~GA_TG#COMD~ ~GA_TG#DIVN~ //Defender: Change Comet to Divine Shell
+		END
+			
+	//IMPORTANT: THE FOLLOWING IS DIRECTLY FROM DIVINE REMIX
+	ACTION_IF ((MOD_IS_INSTALLED ~DIVINE_REMIX/SETUP-DIVINE_REMIX.TP2~ ~1000~) AND // dr spheres installed
+			  (FILE_EXISTS ~divine_remix/lib/macros.tph~)) THEN BEGIN			 // sanity check for library
+		INCLUDE ~divine_remix/lib/macros.tph~
+		LAUNCH_ACTION_FUNCTION cd_kit_sphere
+		STR_VAR
+			table				   	= FGKDDef // file name of your kit's clab table
+			class				   	= druid	// allowed values: cleric, paladin, ranger, druid
+			all					 	= major	  	// use major, minor, or none for each sphere (none can be deleted)
+			animal				  	= major
+			astral				  	= none
+			chaos				   	= none
+			charm				   	= none
+			combat				  	= none
+			creation				= none
+			divination			  	= none
+			elemental			   	= major
+			elemental_air		   	= major
+			elemental_earth		 	= major
+			elemental_fire		  	= major
+			elemental_water		 	= major
+			guardian				= none
+			healing				 	= major
+			law					 	= none
+			necromantic			 	= none
+			necromantic_restorative = major
+			numbers				 	= none
+			plant				   	= major
+			protection			  	= minor
+			summoning			   	= none
+			sun					 	= major
+			thoughts				= none
+			time					= none
+			travelers			   	= none
+			war					 	= none
+			wards				   	= none
+			weather				 	= major
+		END
+	END
+		
+	ADD_KIT ~FGKDDefende~ //Defender: Add Kit
+		//BG1 Proficiency			SMALL_SWORD LARGE_SWORD BLUNT	    MISSILE	 	BOW		    SPIKED	    AXE		 	SPEAR
+		~FGKDDefende				0		    0		    1		    1		    0		    1		    0		    0~
+		//BG2 Proficiency - WEAPPROF.2da
+		~FGKDDefende		  		0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		//Class Requirements		MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		  12		 15~
+		//Class Modifiers			MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				2		 2		   2		 0		   0		 0~
+		//Stats to Dual Class to	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		   17		 17~
+		//Stats to Dual Class from	MIN_STR | MIN_DEX | MIN_CON | MIN_INT | MIN_WIS | MIN_CHR
+		~FGKDDefende				0		 0		   0		 0		   15		 15~
+		//Alignment Restriction		L_G  |  L_N  |  L_E  |  N_G  |  N_N  |  N_E  |  C_G  |  C_N  |  C_E
+		~FGKDDefende				0	   	0	   	0	   	0	   	1	   	0	   	0	   	0	   	0~
+		//Dual Class list			FIGHTER CLERIC  MAGE	THIEF   DRUID   RANGER
+		~FGKDDefende				1	    0	    0	    0	    0	    0~
+		//CLAB file
+		~override\FGKDDef.2da~
+		//Races and Classes - KITTABLE.2da
+		~K_D_H	K_D_D	K_D_G	K_D_E	K_D_HE	K_D_HL	K_D_HO~
+		//Usability Flags - KITLIST.2da
+		~0x00004000	 11~
+		//Lu*.2da (HLA) table to use - LUABBR.2da
+		~KDf~
+		//ToB Starting Equipment - 25STWEAP.2da
+		~LEAT20 * HELM19 BAG27 RING06 RING31 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 AROW11,40 BULL03,40 BOLT06,40 POTN52,5 POTN04,2 POTN14,5 HAMM07 SW1H39 STAF08~
+		//Kit Name - Lower case
+		SAY @40100001
+		//Kit Name - Mixed case
+		SAY @40100002
+		//Kit description
+		SAY @40100003
+		LAF fl#add_kit_ee // launch_action_function start
+			INT_VAR
+				//Biography String
+				biography = "bio_entry"
+				//Kit description
+				//briefdesc = ~%kit_description%~
+			STR_VAR
+				//Kit - Internal Name
+				kit_name = ~FGKDDefende~
+				//Optional - Warrior APR | Monk Fists | Non-proficiency penalty
+				//clswpbon = ~1 0 3~
+				//Optional - Inventory Weapon Slots
+				//numwslot = ~2~
+				//Optional - Colour scheme	METAL | MINOR_CLOTH | MAIN_CLOTH | LEATHER | ARMOR
+				clascolr = ~30 86 37 1 110~
+				//Optional - HP*.2da table name to use (no extension)
+				//hpclass = ~HP[WW]~
+				//Optional - Bonus Base THAC0
+				//clasthac = ~0~
+		END
+		
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~SPPR109.spl~ ~override\FGKDDfA.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Sanctuary spell to rename
+				  ~SPPR201.spl~ ~override\FGKDDfB.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Aid spell to rename
+				  ~SPPR308.spl~ ~override\FGKDDfC.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Remove Paralysis spell to rename
+				  ~SPPR417.spl~ ~override\FGKDDfD.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Lesser Restoration spell to rename
+				  ~SPPR504.spl~ ~override\FGKDDfE.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Raise Dead spell to rename
+				  ~SPPR612.spl~ ~override\FGKDDfF.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Bolt of Glory spell to rename
+				  ~SPPR713.spl~ ~override\FGKDDfG.spl~ //Defender: Ability 1 - Cleric Casting - Copy existing Greater Restoration spell to rename
+		READ_LONG 0x1e "spell_exclusion" //Variable - "spell_exclusion"
+		WRITE_LONG 0x1e ("spell_exclusion" BAND 0b00111111111111111111111111111111) //Defender: Ability 1 - Cleric Casting - Erase exclusion flag for duid
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+	COPY_EXISTING ~kitlist.2da~ ~override~ //Defender: Obtain kit ID code
+		COUNT_2DA_COLS "kitcol" //Variable - "kitcol": Count number of kitlist.2da columns
+			COUNT_2DA_ROWS "kitcol" "kitrow" //Variable - "kitrow": Count number of kitlist.2da rows
+				SET "kitcol1" = ("kitcol" - 1) //Variable - "kitcol1": Set to existing columns
+				SET "kitrow1" = ("kitrow" - 1) //Variable - "kitrow1": Set to existing rows -1
+				READ_2DA_ENTRY "kitrow1" "kitcol1" "kitcol" "kitids" //Variable - "kitids": Read 2da entry to obtain Kit Id
+	COPY_EXISTING_REGEXP ~.*\.itm~ ~override~ //Defender: Passive 1 - Restrict Weapons
+		READ_LONG 0x18 "item_flags" //Variable - "item_flags": Set to item flags
+		READ_LONG 0x1e "item_exclusion" //Variable - "item_exclusion": Set to item usability
+		READ_BYTE 0x31 "item_proficiency" //Variable - "item_proficiency": Set to item proficiency
+		PATCH_IF (
+				(
+				(
+				(("item_flags" BAND 0b00000000000000000000000000000100) = 0b00000000000000000000000000000100) OR
+				(("item_flags" BAND 0b00000000000000000000000000001000) = 0b00000000000000000000000000001000))
+			AND
+				(
+				("item_proficiency" = "96") OR 
+				("item_proficiency" = "95") OR 
+				("item_proficiency" = "98") OR 
+				("item_proficiency" = "106")
+				)
+			AND
+				(
+				("item_exclusion" BAND 0b01000000000000000000000000000000) = 0b00000000000000000000000000000000)
+				)
+			AND NOT
+				(
+				("item_exclusion" BAND 0b11111111111111111111111111111111) = 0b00000000000000000000000000000000)) //Defender: Passive 1 - Restrict Weapons - Search for items with ((DROPPABLE) or (DISPLAYABLE)), (DAGGER, SCIMITAR, SPEAR and DART proficiency), (usable by single-class Druids) and without (usable by everyone)
+			THEN BEGIN
+			SET opcode = "319" //Variable - "opcode": Set to 319 (Restrict Item)
+			SET target = "1" //Variable - "target": Set to 1 (Target Self)
+			SET power = "0" //Variable - "power: Set to 0 (Item Restricted from parameters)
+			SET parameter1 = "kitids" //Variable - "parameter1": Set to "kitids" (Kit ID)
+			SET parameter2 = "9" //Variable - "parameter2": Set to 9 (kit.ids)
+			SET timing = "2" //Variable - "timing": Set to 2 (Instant/While Equipped)
+			SET resist_dispel = "0" //Variable - "resist_dispel": Set to 0 (No dispel/bypass resistant)
+			SET duration = "0" //Variable - "duration": Set to 0
+			SET probability1 = "100" //Variable - "probability1": Set to 100
+			SET probability2 = "0" //Variable - "probability2": Set to 0
+			SPRINT resource ~~ //Variable - "resource": Set to ~~
+			SET dicenumber = "0" //Variable - "dicenumber": Set to 0
+			SET dicesize = "0" //Variable - "dicesize": Set to 0
+			SET savingthrow = "0" //Variable - "savingthrow": Set to 0
+			SET savebonus = "0" //Variable - "savebonus": Set to 0
+			SET insert_point = "0" //Variable - "insert_point": Set to 0 (Inject at start) - not actually working?
+				LAUNCH_PATCH_MACRO ~ADD_ITEM_EQEFFECT~ //Defender: Passive 1 - Restrict Weapons - Add restrict effect to items
+					READ_LONG  0x6a "effects_off" //Variable - "effects_off": Set to effects offset
+					READ_SHORT 0x70 "effects_num"  //Vairable - "effects_num": Set to effects number
+					READ_SHORT "effects_off" "effects_opcode" //Variable - "effects_opcode: Set to equipped effect 1 opcode
+					PATCH_IF ("effects_opcode" = 319) THEN BEGIN //Defender: Passive 1 - Restrict Weapons - Check if Restrict effect injected
+						WRITE_LONG ("effects_off" + 0x2c) RESOLVE_STR_REF (@40100002) //Defender: Passive 1 - Restrict Weapons - Add mixed string to generated usability list
+					END
+		END
+		BUT_ONLY_IF_IT_CHANGES
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\

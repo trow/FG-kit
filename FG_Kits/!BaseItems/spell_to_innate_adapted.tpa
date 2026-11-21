@@ -1,0 +1,30 @@
+//IMPORTANT: THE FOLLOWING IS ADAPTED FROM DIVINE REMIX
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\     Macro                         \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\     spell_to_innate_adapted       \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+//REQUIRES: COPY
+//VARIABLES: "dr_state"
+//Changes the copied spell to an innate version of it. Also, check if divine remix is installed. If so, reduce cast speed by 2
+
+	DEFINE_PATCH_MACRO ~spell_to_innate_adapted~ BEGIN
+		WRITE_SHORT 0x1c 4 //Spell Type: to Innate
+		WRITE_LONG 0x34 1 //Spell Level: to 1
+		READ_LONG  0x64 "abilities_off"
+		READ_SHORT 0x68 "num_abilities"
+		FOR ("ability" = 0; "ability" < "num_abilities"; "ability" += 1) BEGIN
+			READ_BYTE ("abilities_off" + 0x28 * "ability" + 0x12) "cast_speed"
+			WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x02) 4 //Spell Location: to Innate Slots
+			PATCH_IF ("dr_state" = 1) BEGIN //Divine Remix state check
+				PATCH_IF "cast_speed" < 3 BEGIN
+					WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x12) 0
+					END
+					ELSE BEGIN
+						WRITE_SHORT ("abilities_off" + 0x28 * "ability" + 0x12) ("cast_speed" - 2)
+						END
+				END
+			END
+		END

@@ -1,0 +1,209 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Trickster				 		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @501XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+@50100005 = ~Advantages:
+– Gains Arcane Tricks, giving the Trickster the ability to cast certain amount of Wizard spells per day. The amount of spells cast per day, and which spells able to be cast, are as follows.
+ Level 1:
+  Colour Spray, Magic Missile, Sleep, Spook, True Strike
+  Gains one use at level 1, and additional uses at levels 3, 5, and 7
+ Level 2:
+  Blur, Glitterdust, Invisibility, Luck, Mirror Image
+  Gains one use at level 4, and additional uses at levels 6, 8, and 10
+ Level 3:
+  Clairvoyance, Dispel Magic, Haste, Slow
+  Gains one use at level 7, and additional uses at levels 9, 11, and 13
+ Level 4:
+  Confusion, Dimension Door, Greater Malison, Improved Invisibility
+  Gains one use at level 10, and additional uses at levels 12, 14, and 16
+ Level 5:
+  Domination, Lower Resistance, Shadow Door
+  Gains one use at level 13, and additional uses at levels 15, 17, and 19
+
+Disadvantages:
+– May only distribute 15 skill points per level (25 at level 1) among thieving skills.
+– May not be lawful
+– May not use Set Snare ability.
+– -2 to backstab multiplier compared to an unkitted Thief:
+  Level 1-8: x1 (no multiplier)
+  Level 9-12: x2
+  Level 13+: x3~ //Trickster: Kit Ability Block - Spell Revisions
+@50100008 = ~Arcane Trick: Level 1
+The Trickster can cast one of the following Level 1 Wizard spells:
+ Colour Spray
+ Magic Missile
+ Sleep
+ Spook
+ True Strike~ //Trickster: Ability 1 Description - Spell Revisions
+@50100010 = ~Arcane Trick: Level 2
+The Trickster can cast one of the following Level 2 Wizard spells:
+ Blur
+ Glitterdust
+ Invisibility
+ Luck
+ Mirror Image~ //Trickster: Ability 2 Description - Spell Revisions
+@50100012 = ~Arcane Trick: Level 3
+The Trickster can cast one of the following Level 3 Wizard spells:
+ Clairvoyance
+ Dispel Magic
+ Haste
+ Slow~ //Trickster: Ability 3 Description - Spell Revisions
+@50100014 = ~Arcane Trick: Level 4
+The Trickster can cast one of the following Level 4 Wizard spells:
+ Confusion
+ Dimension Door
+ Greater Malison
+ Improved Invisibility~ //Trickster: Ability 4 Description - Spell Revisions
+@50100016 = ~Arcane Trick: Level 5
+The Trickster can cast one of the following Level 5 Wizard spells:
+ Domination
+ Lower Resistances
+ Shadow Door~ //Trickster: Ability 5 Description - Spell Revisions
+@50100018 = ~Arcane Trick: Level 6
+Extensive familiarity with magic has given the Trickster the abiility to cast the following Level 6 Wizard Spells:
+ Improved Haste
+ Mislead
+ Pierce Magic~ //Trickster: High Level Ability Description - Spell Revisions
+ 
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Agent		 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @508XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+@50800005 = ~Advantages:
+– Gains Divine Acts, giving the Agent the ability to cast certain amount of Priest spells per day. The amount of spells cast per day, and which spells able to be cast, are as follows.
+ Level 1:
+  Armor of Faith, Command, Doom, Remove Fear, Sanctuary
+  Gains one use at level 1, and additional uses at levels 3, and 5
+ Level 2:
+  Chant, Hold Person, Know Opponent, Silence, Slow Poison
+  Gains one use at level 4, and additional uses at levels 6, and 8
+ Level 3:
+  Glyph of Warding, Invisibility Purge, Miscast Magic, Remove Paralysis
+  Gains one use at level 7, and additional uses at levels 9, and 11
+ Level 4:
+  Cloak of Fear, Death Ward, Lesser Restoration, Negative Plane Protection
+  Gains one use at level 10, and additional uses at levels 12, and 14
+ Level 5:
+  Flame Strike, Righteous Fury, Slay Living
+  Gains one use at level 13, and additional uses at levels 15, and 17
+
+Disadvantages:
+– Alignment restricted to non-chaotic
+– May only distribute 20 skill points per level (30 at level 1) among thieving skills.
+– May not use Set Snare ability.
+– -1 to backstab multiplier compared to an unkitted Thief:
+  Level 1-4: x1 (no multiplier)
+  Level 5-8: x2
+  Level 9-12: x3
+  Level 13+: x4~ //Agent: Kit Ability Block - Spell Revisions
+@50500007 = ~Divine Act: Level 1
+The Agent can cast one of the following Level 1 Priest spells:
+ Armor of Faith
+ Command
+ Doom
+ Remove Fear
+ Sanctuary~ //Agent: Ability 1 Description - Spell Revisions
+@50500009 = ~Divine Act: Level 2
+The Agent can cast one of the following Level 2 Priest spells:
+ Chant
+ Hold Person
+ Know Opponent
+ Silence
+ Slow Poison~ //Agent: Ability 2 Description - Spell Revisions
+@50500011 = ~Divine Act: Level 3
+The Agent can cast one of the following Level 3 Priest spells:
+ Glyph of Warding
+ Invisibility Purge
+ Miscast Magic
+ Remove Paralysis~ //Agent: Ability 3 Description - Spell Revisions
+@50500013 = ~Divine Act: Level 4
+The Agent can cast one of the following Level 4 Priest spells:
+ Cloak of Fear
+ Death Ward
+ Lesser Restoration
+ Negative Plane Protection~ //Agent: Ability 4 Description - Spell Revisions
+@50500015 = ~Divine Act: Level 5
+The Agent can cast one of the following Level 5 Priest spells:
+ Flame Strike
+ Righteous Fury
+ Slay Living~ //Agent: Ability 5 Description - Spell Revisions
+@50500017 = ~Divine Act: Level 6
+Great piety to <PRO_HISHER> god has given the Agent the ability to cast the following Level 6 Priest spells:
+ Blade Barrier
+ Bolt of Glory
+ Heal~ //Agent: High Level Ability Description - Spell Revisions
+ 
+ ////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Thief Kits				   		 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 Seeker		 					 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\	 @509XXXXX					 	 \\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\
+@50900005 = ~Advantages:
+– Gains Primal Whispers, giving the Agent the ability to cast certain amount of Priest spells per day. The amount of spells cast per day, and which spells able to be cast, are as follows.
+ Level 1:
+  Entangle, Faerie Fire, Shillelagh, Spirit Ward, Sunscorch
+  Gains one use at level 1, and additional uses at levels 3, and 5
+ Level 2:
+  Barkskin, Charm Person or Mammal, Fire Trap, Goodberries, Writhing Fog
+  Gains one use at level 4, and additional uses at levels 6, and 8
+ Level 3:
+  Call Lightning, Hold Animal, Spiritual Clarity, Summon Insects
+  Gains one use at level 7, and additional uses at levels 9, and 11
+ Level 4:
+  Call Woodland Beings, Ice Storm, Poison, Spirit Fire
+  Gains one use at level 10, and additional uses at levels 12, and 14
+ Level 5:
+  Pixie Dust, Recall Spirit, Stoneskin
+  Gains one use at level 13, and additional uses at levels 15, and 17
+
+Disadvantages:
+– Alignment must have a neutral component.
+– Gains Set Snare ability uses later than a normal thief, with one use at level 1 and an additional use every 7 levels thereafter.– May only distribute 20 skill points per level (30 at level 1) among thieving skills.
+– -2 to backstab multiplier compared to an unkitted Thief:
+  Level 1-8: x1 (no multiplier)
+  Level 9-12: x2
+  Level 13+: x3~ //Seeker: Kit Ability Block - Spell Revisions
+@50900007 = ~Primal Whisper: Level 1
+The Seeker can cast one of the following Level 1 Priest Spells:
+ Entangle
+ Faerie Fire
+ Shillelagh
+ Spirit Ward
+ Sunscorch~ //Seeker: Ability 1 Description - Spell Revisions
+@50900009 = ~Primal Whisper: Level 2
+The Seeker can cast one of the following Level 2 Priest Spells:
+ Barkskin
+ Charm Person or Mammal
+ Fire Trap
+ Goodberries
+ Writhing Fog~ //Seeker: Ability 2 Description - Spell Revisions
+@50900011 = ~Primal Whisper: Level 3
+The Seeker can cast one of the following Level 3 Priest Spells:
+ Call Lightning
+ Hold Animal
+ Spiritual Clarity
+ Summon Insects~ //Seeker: Ability 3 Description - Spell Revisions
+@50900013 = ~Primal Whisper: Level 4
+The Seeker can cast one of the following Level 4 Priest Spells:
+ Call Woodland Beings
+ Ice Storm
+ Poison
+ Spirit Fire~ //Seeker: Ability 4 Description - Spell Revisions
+@50900015 = ~Primal Whisper: Level 5
+The Seeker can cast one of the following Level 5 Priest Spells:
+ Pixie Dust
+ Recall Spirit
+ Stoneskin~ //Seeker: Ability 5 Description - Spell Revisions
+@50900017 = ~Primal Whisper: Level 6
+The Seeker can cast one of the following Level 6 Priest Spells:
+ Conjure Animals
+ False Dawn
+ Spiritual Lock~ //Seeker: High Level Ability Description - Spell Revisions
